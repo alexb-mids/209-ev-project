@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Global EV Transition: What Drives Adoption?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Geist+Mono:wght@300;400;500&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* Palette from colorhunt */
+      --teal-deep:    #006769;
+      --teal-mid:     #40A578;
+      --green-light:  #9DDE8B;
+      --lime:         #E6FF94;
+
+      /* Derived surfaces */
+      --bg:           #005456;   /* slightly darker than deep teal */
+      --bg-1:         #006769;   /* main teal */
+      --bg-2:         #007a7c;   /* cards / elevated */
+      --bg-3:         #008d8f;   /* hover states */
+      --bg-4:         #40A578;   /* mid green surface */
+
+      /* Text */
+      --text-1:       #ffffff;
+      --text-2:       #d4f5e9;
+      --text-3:       #9DDE8B;
+      --text-4:       #6abf8a;
+
+      /* Accent */
+      --accent:       #E6FF94;
+      --accent-dim:   #c8e870;
+      --accent-glow:  rgba(230,255,148,0.15);
+      --accent-glow2: rgba(230,255,148,0.07);
+      --accent-border:rgba(230,255,148,0.35);
+
+      /* Borders */
+      --border:       rgba(255,255,255,0.10);
+      --border-2:     rgba(255,255,255,0.18);
+      --border-accent:rgba(230,255,148,0.3);
+
+      /* Shadows */
+      --shadow-sm:    0 1px 4px rgba(0,0,0,0.18);
+      --shadow:       0 4px 16px rgba(0,0,0,0.22);
+
+      --radius:       14px;
+      --radius-sm:    8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Instrument Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-1);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Atmospheric background gradient */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 10% 0%, rgba(64,165,120,0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 90% 100%, rgba(157,222,139,0.12) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 40px 100px;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 60px;
+      animation: fadeDown 0.5s ease both;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--text-1);
+      letter-spacing: -0.01em;
+    }
+
+    .logo-mark {
+      width: 30px; height: 30px;
+      background: var(--accent);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--teal-deep);
+      font-weight: 900;
+      box-shadow: 0 2px 10px rgba(230,255,148,0.4);
+    }
+
+    .nav-tag {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      border: 1px solid var(--accent-border);
+      background: var(--accent-glow2);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 48px;
+      align-items: start;
+      margin-bottom: 64px;
+      animation: fadeUp 0.6s 0.08s ease both;
+    }
+
+    .hero-kicker {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.63rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-kicker::before {
+      content: '';
+      width: 18px; height: 2px;
+      background: var(--green-light);
+      flex-shrink: 0;
+      border-radius: 2px;
+    }
+
+    h1 {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      color: var(--text-1);
+      margin-bottom: 18px;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-body {
+      font-size: 0.95rem;
+      color: var(--text-2);
+      line-height: 1.72;
+      max-width: 500px;
+    }
+
+    .hero-aside {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 4px;
+    }
+
+    .kpi-card {
+      background: rgba(0,0,0,0.18);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .kpi-card:hover {
+      border-color: var(--border-2);
+      transform: translateX(-3px);
+    }
+
+    .kpi-val {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-1);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .kpi-val span {
+      font-size: 0.9rem;
+      color: var(--text-3);
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
+    .kpi-label {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-4);
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .live-dot {
+      width: 5px; height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease infinite;
+      box-shadow: 0 0 6px var(--accent);
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:0.5; transform:scale(0.8); }
+    }
+
+    /* ─── SECTION LABEL ─── */
+    .section-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      animation: fadeUp 0.6s 0.12s ease both;
+    }
+
+    .s-label {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-4);
+      white-space: nowrap;
+    }
+
+    .section-row::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── CARD ─── */
+    .card {
+      background: rgba(0,0,0,0.18);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      animation: fadeUp 0.6s 0.16s ease both;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 26px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .year-tag {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.58rem;
+      color: var(--text-4);
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.06em;
+    }
+
+    .pill-group {
+      display: flex;
+      gap: 3px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+    }
+
+    .pill {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: none;
+      background: transparent;
+      color: var(--text-3);
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .pill:hover { color: var(--text-1); }
+
+    .pill.active {
+      background: var(--accent);
+      color: var(--teal-deep);
+      font-weight: 500;
+      box-shadow: 0 1px 6px rgba(230,255,148,0.3);
+    }
+
+    .card-body { padding: 22px 26px; }
+
+    .card-footer {
+      padding: 12px 26px;
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,0.1);
+    }
+
+    .footer-note {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.05em;
+      color: var(--text-4);
+    }
+
+    .footer-note code {
+      background: rgba(230,255,148,0.1);
+      border: 1px solid var(--accent-border);
+      padding: 1px 6px;
+      border-radius: 3px;
+      color: var(--accent);
+    }
+
+    /* ─── TREEMAP PLACEHOLDER ─── */
+    .treemap-ph {
+      width: 100%;
+      height: 390px;
+      border-radius: 10px;
+      border: 1.5px dashed rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .treemap-ph::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    #treemap-year::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 4px rgba(230,255,148,0.4);
+    }
+
+    #treemap-year::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      cursor: pointer;
+    }
+
+    .ph-icon { font-size: 2rem; opacity: 0.25; position: relative; }
+
+    .ph-text {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-4);
+      text-align: center;
+      line-height: 1.8;
+      position: relative;
+    }
+
+    .ph-badge {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.57rem;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      background: var(--accent-glow);
+      border: 1px solid var(--accent-border);
+      padding: 4px 12px;
+      border-radius: 5px;
+      position: relative;
+    }
+
+    /* ─── TABS ─── */
+    .tabs-wrap {
+      margin-top: 44px;
+      animation: fadeUp 0.6s 0.24s ease both;
+    }
+
+    .tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 12px 20px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text-4);
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.18s;
+    }
+
+
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 16px; right: 16px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      transform: scaleX(0);
+      transition: transform 0.22s ease;
+    }
+
+    .tab-btn:hover { color: var(--text-2); }
+
+    .tab-btn.active { color: var(--text-1); }
+
+
+    .tab-btn.active::after { transform: scaleX(1); }
+
+    .tab-panel {
+      display: none;
+      background: rgba(0,0,0,0.15);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 18px 18px;
+      padding: 34px 30px;
+      backdrop-filter: blur(12px);
+      animation: panelIn 0.25s ease;
+    }
+
+    .tab-panel.active { display: block; }
+
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── PANEL INTERNALS ─── */
+    .panel-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 26px;
+    }
+
+    .panel-title {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-1);
+      margin-bottom: 5px;
+    }
+
+    .panel-desc {
+      font-size: 0.83rem;
+      color: var(--text-2);
+      line-height: 1.65;
+      max-width: 500px;
+    }
+
+    /* Chips */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 26px;
+    }
+
+    .chip {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.15);
+      color: var(--text-3);
+      cursor: pointer;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .chip:hover {
+      border-color: var(--border-2);
+      color: var(--text-1);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .chip.on {
+      border-color: var(--accent-border);
+      background: var(--accent-glow);
+      color: var(--accent);
+    }
+
+    /* KPI row */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .kpi-sm {
+      background: rgba(0,0,0,0.18);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .kpi-sm:hover {
+      border-color: var(--border-2);
+      transform: translateY(-2px);
+    }
+
+    .k-label {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-4);
+      margin-bottom: 8px;
+    }
+
+    .k-val {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-1);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .k-delta {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.57rem;
+      color: var(--accent);
+      margin-top: 5px;
+    }
+
+    /* Viz placeholder */
+    .viz-ph {
+      width: 100%;
+      height: 300px;
+      background: rgba(0,0,0,0.15);
+      border: 1.5px dashed rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .viz-ph::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .viz-ph-label {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.63rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-4);
+      text-align: center;
+      line-height: 1.8;
+      position: relative;
+    }
+
+    .viz-ph-tag {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.57rem;
+      color: var(--accent);
+      background: var(--accent-glow);
+      border: 1px solid var(--accent-border);
+      padding: 3px 10px;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    /* Compare grid */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .compare-slot {
+      background: rgba(0,0,0,0.15);
+      border: 1.5px dashed rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .compare-slot:hover {
+      border-color: var(--accent-border);
+      background: var(--accent-glow2);
+    }
+
+    .cs-plus { font-size: 1.6rem; color: var(--text-4); line-height: 1; }
+    .cs-label {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-4);
+    }
+    .cs-hint { font-size: 0.76rem; color: var(--text-3); }
+
+    /* Callout */
+    .callout {
+      margin-top: 20px;
+      padding: 16px 18px;
+      background: var(--accent-glow);
+      border: 1px solid var(--accent-border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius-sm);
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .callout-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+    .callout-text {
+      font-size: 0.82rem;
+      color: var(--text-2);
+      line-height: 1.65;
+    }
+
+    .callout-text strong { color: var(--accent); font-weight: 600; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      margin-top: 80px;
+      padding-top: 26px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      animation: fadeUp 0.6s 0.32s ease both;
+    }
+
+    .footer-name {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-2);
+      margin-bottom: 4px;
+    }
+
+    .footer-sub {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.08em;
+      color: var(--text-4);
+    }
+
+    .footer-team { display: flex; gap: 28px; }
+
+    .member { text-align: right; }
+
+    .member-name {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-2);
+    }
+
+    .member-role {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.54rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-4);
+      margin-top: 2px;
+    }
+
+    /* Color swatch strip — nod to the palette */
+    .palette-strip {
+      display: flex;
+      gap: 0;
+      height: 3px;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      opacity: 0.6;
+    }
+    .palette-strip span { flex: 1; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── NARRATIVE BOX ─── */
+    .narrative-box {
+      background: rgba(0,0,0,0.15);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--teal-mid);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .narrative-label {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal-mid);
+      margin-bottom: 8px;
+    }
+
+    .narrative-text {
+      font-size: 0.87rem;
+      color: var(--text-2);
+      line-height: 1.7;
+    }
+
+    .narrative-text strong { color: var(--accent); }
+
+    /* ─── POLICY LIST ─── */
+    .policy-item {
+      display: flex;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .policy-item:last-child { border-bottom: none; }
+
+    .policy-year {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--accent);
+      min-width: 36px;
+      padding-top: 2px;
+    }
+
+    .policy-body {}
+
+    .policy-title {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-1);
+      margin-bottom: 3px;
+    }
+
+    .policy-desc {
+      font-size: 0.78rem;
+      color: var(--text-3);
+      line-height: 1.6;
+    }
+
+    .policy-tag {
+      display: inline-block;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 3px;
+      margin-right: 5px;
+      margin-top: 5px;
+    }
+
+    .policy-tag.demand   { background: rgba(230,255,148,0.12); color: var(--accent); border: 1px solid var(--accent-border); }
+    .policy-tag.supply   { background: rgba(64,165,120,0.15);  color: var(--teal-mid); border: 1px solid rgba(64,165,120,0.3); }
+    .policy-tag.target   { background: rgba(157,222,139,0.1);  color: var(--green-light); border: 1px solid rgba(157,222,139,0.3); }
+
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--teal-mid); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--green-light); }
+
+    /* ─── SUB-TABS (Compare Countries) ─── */
+    .sub-tab-bar {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sub-tab-btn {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 9px 18px 11px;
+      border: none;
+      background: transparent;
+      color: var(--text-4);
+      cursor: pointer;
+      position: relative;
+      transition: color 0.18s;
+    }
+
+    .sub-tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 12px; right: 12px;
+      height: 2px;
+      background: var(--teal-mid);
+      border-radius: 2px;
+      transform: scaleX(0);
+      transition: transform 0.22s ease;
+    }
+
+    .sub-tab-btn:hover { color: var(--text-2); }
+    .sub-tab-btn.active { color: var(--text-1); }
+    .sub-tab-btn.active::after { transform: scaleX(1); }
+
+    .sub-tab-panel { display: none; }
+    .sub-tab-panel.active { display: block; animation: panelIn 0.25s ease; }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Palette strip -->
+  <div class="palette-strip" style="margin-top:0;margin-bottom:0;position:fixed;top:0;left:0;right:0;z-index:100;height:3px;border-radius:0;opacity:1;">
+    <span style="background:#006769"></span>
+    <span style="background:#40A578"></span>
+    <span style="background:#9DDE8B"></span>
+    <span style="background:#E6FF94"></span>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">
+      <div class="logo-mark">⚡</div>
+      W209 Data Visualization · UC Berkeley MIDS
+    </div>
+    <div class="nav-tag">IEA Global EV Data Explorer Dataset · 2010–2024</div>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <h1>The Global <em>EV Transition:</em><br/>What Drives Adoption?</h1>
+      <p class="hero-body">
+        Infrastructure investment, policy design, and vehicle mix all shape EV adoption — but not equally. Explore what the data reveals across 54 countries and 14 years to guide effective electrification policy.
+      </p>
+    </div>
+    <div class="hero-aside">
+      <div class="kpi-card">
+        <div>
+          <div class="kpi-val">54 <span>countries</span></div>
+          <div class="kpi-label">Dataset Coverage</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div>
+          <div class="kpi-val">14 <span>years</span></div>
+          <div class="kpi-label">2010 – 2024</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 1 — GLOBAL OVERVIEW
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-row"><span class="s-label">Global Overview</span></div>
+
+  <!-- 1A: Regional trend line chart -->
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-header">
+      <div class="card-title">EV Adoption by Region</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <!-- Mode selector -->
+        <div class="pill-group">
+          <button class="pill active" onclick="setPill(this,'mode','cars')">Cars</button>
+          <button class="pill" onclick="setPill(this,'mode','buses')">Buses</button>
+          <button class="pill" onclick="setPill(this,'mode','trucks')">Trucks</button>
+          <button class="pill" onclick="setPill(this,'mode','2w3w')">2/3W</button>
+          <button class="pill" onclick="setPill(this,'mode','vans')">Vans</button>
+        </div>
+        <!-- Metric selector -->
+        <div class="pill-group">
+          <button class="pill active" onclick="setPill(this,'metric','ev_stock_share')">Stock Share</button>
+          <button class="pill" onclick="setPill(this,'metric','ev_stock')">EV Stock</button>
+          <button class="pill" onclick="setPill(this,'metric','ev_sales_share')">Sales Share</button>
+          <button class="pill" onclick="setPill(this,'metric','ev_sales')">EV Sales</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body" style="padding: 16px 26px 16px;">
+      <div id="regional-chart-container"></div>
+    </div>
+    <div class="card-footer">
+      <div class="footer-note">
+        Select a <strong style="color:var(--text-2)">vehicle mode</strong> and <strong style="color:var(--text-2)">metric</strong> above to update the chart · Source: IEA Global EV Data Explorer
+      </div>
+    </div>
+  </div>
+
+<!-- 1B: Country-level treemap -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      Country-Level Distribution
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <!-- Year slider -->
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-family:'Geist Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;color:var(--text-4);">Year</span>
+        <input type="range" id="treemap-year" min="2010" max="2024" value="2024"
+          oninput="setTreemapYear(this.value)" style="
+            -webkit-appearance:none;width:120px;height:3px;border-radius:2px;
+            background:linear-gradient(to right, var(--accent) 100%, rgba(255,255,255,0.15) 100%);
+            outline:none;cursor:pointer;">
+        <span class="year-tag" id="treemap-year-label">2024</span>
+      </div>
+      <!-- Mode pills -->
+      <div class="pill-group">
+        <button class="pill active" onclick="setPill(this,'treemap-mode','cars')">Cars</button>
+        <button class="pill" onclick="setPill(this,'treemap-mode','buses')">Buses</button>
+        <button class="pill" onclick="setPill(this,'treemap-mode','trucks')">Trucks</button>
+        <button class="pill" onclick="setPill(this,'treemap-mode','2w3w')">2/3W</button>
+        <button class="pill" onclick="setPill(this,'treemap-mode','vans')">Vans</button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="treemap-ph" id="treemap-container">
+      <div class="ph-icon">▦</div>
+      <div class="ph-text">
+        Country Treemap<br/>
+        <span style="font-size:0.58rem">Area = EV stock share · Color = EV sales share · Click a country to drill down</span>
+      </div>
+      <div class="ph-badge">→ Observable cell: country-treemap</div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="footer-note">
+      <strong style="color:var(--accent)">Select a country below</strong> to drill down into country-level analysis · Source: IEA Global EV Data Explorer
+    </div>
+  </div>
+</div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 2 — COUNTRY DEEP-DIVE
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-row" style="margin-top:52px;"><span class="s-label">Country Deep-Dive</span></div>
+
+  <!-- Country selector -->
+  <div class="card" style="margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:none;">
+    <div class="card-body" style="padding:16px 26px;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span style="font-family:'Geist Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);white-space:nowrap;">Select country</span>
+        <select id="country-select" onchange="selectCountry(this.value)" style="
+          font-family:'Geist Mono',monospace;
+          font-size:0.75rem;
+          background:rgba(0,0,0,0.25);
+          color:var(--text-1);
+          border:1px solid var(--border-2);
+          border-radius:8px;
+          padding:8px 14px;
+          cursor:pointer;
+          outline:none;
+          min-width:200px;
+          appearance:none;
+          background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22><path fill=%22%239DDE8B%22 d=%22M6 8L1 3h10z%22/></svg>');
+          background-repeat:no-repeat;
+          background-position:right 12px center;
+          padding-right:32px;
+        ">
+          <option value="">Select a country…</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI strip -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-bottom:0;" id="kpi-strip">
+    <div class="kpi-sm" style="border-radius:0;border-top:none;border-right:none;">
+      <div class="k-label">EV Stock Share <span style="opacity:0.6;">(cars · 2024)</span></div>
+      <div class="k-val" id="kpi-stock-share">—</div>
+      <div class="k-delta" id="kpi-stock-delta">Select a country</div>
+    </div>
+    <div class="kpi-sm" style="border-radius:0;border-top:none;border-right:none;">
+      <div class="k-label">EV Sales Share <span style="opacity:0.6;">(cars · 2024)</span></div>
+      <div class="k-val" id="kpi-sales-share">—</div>
+      <div class="k-delta" id="kpi-sales-delta">Select a country</div>
+    </div>
+    <div class="kpi-sm" style="border-radius:0;border-top:none;">
+      <div class="k-label">Chargers / 1k EVs <span style="opacity:0.6;">(cars · 2024)</span></div>
+      <div class="k-val" id="kpi-charger-density">—</div>
+      <div class="k-delta" id="kpi-charger-delta">Select a country</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-wrap" style="margin-top:0;">
+    <div class="tab-bar" style="border-top:1px solid var(--border);">
+      <button class="tab-btn active" onclick="switchTab(event,'tab-policies')">Policies</button>
+      <button class="tab-btn" onclick="switchTab(event,'tab-infra')">Infrastructure</button>
+      <button class="tab-btn" onclick="switchTab(event,'tab-modes')">Vehicle Mode Mix</button>
+      <button class="tab-btn" onclick="switchTab(event,'tab-headtohead')">Compare Countries</button>
+    </div>
+
+    <!-- ── TAB: POLICIES ── -->
+    <div class="tab-panel active" id="tab-policies">
+
+      <!-- Cluster narrative -->
+      <!-- <div class="narrative-box" id="narrative-policies">
+        <div class="narrative-label">Policy Context</div>
+        <div class="narrative-text" id="narrative-policies-text">
+          Select a country above to see its policy narrative.
+        </div>
+      </div> -->
+
+      <!-- Mode selector for policies -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <span style="font-family:'Geist Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);">Vehicle mode</span>
+        <div class="pill-group">
+          <button class="pill active" onclick="setPill(this,'policy-mode','cars')">Cars</button>
+          <button class="pill" onclick="setPill(this,'policy-mode','buses')">Buses</button>
+          <button class="pill" onclick="setPill(this,'policy-mode','trucks')">Trucks</button>
+          <button class="pill" onclick="setPill(this,'policy-mode','2w3w')">2/3W</button>
+          <button class="pill" onclick="setPill(this,'policy-mode','vans')">Vans</button>
+        </div>
+      </div>
+
+      <!-- Policy chart placeholder -->
+      <div class="viz-ph" style="height:300px;" id="policy-chart-container">
+        <div class="ph-icon">📋</div>
+        <div class="ph-text">
+          EV stock share over time with policy event markers<br/>
+          <span style="font-size:0.57rem;opacity:0.7">Demand incentives · Supply mandates · Announced targets</span>
+        </div>
+        <div class="ph-badge">→ Observable cell: policy-timeline-chart</div>
+      </div>
+
+      <!-- Policy list -->
+      <div style="margin-top:20px;">
+        <div style="font-family:'Geist Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);margin-bottom:12px;">Policy Timeline</div>
+        <div id="policy-list">
+          <div class="policy-item">
+            <div class="policy-year">—</div>
+            <div class="policy-body">
+              <div class="policy-title">Select a country to load policies</div>
+              <div class="policy-desc">Policies will be listed chronologically, filtered by selected vehicle mode where data permits.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── TAB: INFRASTRUCTURE ── -->
+    <div class="tab-panel" id="tab-infra">
+
+    <div id="infra-chart-container" style="width:100%;min-height:340px;"></div>
+
+      <div class="callout" id="callout-infra">
+        <div class="callout-icon">📉</div>
+        <div class="callout-text" id="callout-infra-text">
+          <strong>The density paradox:</strong> As EV adoption accelerates, chargers-per-1,000-EVs naturally declines — not because infrastructure shrinks, but because fleet growth outpaces it. This declining ratio is the signature of a successful infrastructure-led market.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── TAB: VEHICLE MODE MIX ── -->
+    <div class="tab-panel" id="tab-modes">
+
+      <!-- <div class="narrative-box" id="narrative-modes">
+        <div class="narrative-label">Mode Mix Context</div>
+        <div class="narrative-text" id="narrative-modes-text">
+          Select a country above to see its vehicle mode narrative.
+        </div>
+      </div> -->
+
+      <!-- Stacked / Normalised toggle -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <span style="font-family:'Geist Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);">Chart view</span>
+        <div class="pill-group">
+          <button class="pill active" onclick="setPill(this,'stack-view','stacked')">Stacked</button>
+          <button class="pill" onclick="setPill(this,'stack-view','normalized')">Normalized</button>
+        </div>
+      </div>
+
+      <div class="viz-ph" style="height:340px;" id="modes-chart-container">
+        <div class="ph-icon">🚗</div>
+        <div class="ph-text">
+          EV stock by vehicle mode · Stacked area chart · 2010–2024<br/>
+          <span style="font-size:0.57rem;opacity:0.7">Cars · 2/3 Wheelers · Buses · Trucks · Vans</span>
+        </div>
+        <div class="ph-badge">→ Observable cell: mode-mix-chart</div>
+      </div>
+
+      <div class="callout" id="callout-modes">
+        <div class="callout-icon">🌏</div>
+        <div class="callout-text" id="callout-modes-text">
+          <strong>Compositional insight:</strong> What counts as "an EV" differs radically by country. Switch to Normalized view to see the share of each mode within a country's total EV fleet.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── TAB: COMPARE COUNTRIES ── -->
+    <div class="tab-panel" id="tab-headtohead">
+
+      <!-- Country selectors -->
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap;">
+        <span style="font-family:'Geist Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);white-space:nowrap;">Compare against</span>
+        <select id="compare-select-1" onchange="updateCompare()" style="
+          font-family:'Geist Mono',monospace;font-size:0.75rem;
+          background:rgba(0,0,0,0.25);color:var(--text-1);
+          border:1px solid var(--border-2);border-radius:8px;
+          padding:8px 32px 8px 14px;cursor:pointer;outline:none;min-width:180px;
+          appearance:none;
+          background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22><path fill=%22%239DDE8B%22 d=%22M6 8L1 3h10z%22/></svg>');
+          background-repeat:no-repeat;background-position:right 12px center;">
+          <option value="">Country 1…</option>
+        </select>
+        <select id="compare-select-2" onchange="updateCompare()" style="
+          font-family:'Geist Mono',monospace;font-size:0.75rem;
+          background:rgba(0,0,0,0.25);color:var(--text-1);
+          border:1px solid var(--border-2);border-radius:8px;
+          padding:8px 32px 8px 14px;cursor:pointer;outline:none;min-width:180px;
+          appearance:none;
+          background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22><path fill=%22%239DDE8B%22 d=%22M6 8L1 3h10z%22/></svg>');
+          background-repeat:no-repeat;background-position:right 12px center;">
+          <option value="">Country 2…</option>
+        </select>
+      </div>
+
+      <!-- Sub-tabs -->
+      <div class="sub-tab-bar">
+        <button class="sub-tab-btn active" onclick="switchSubTab(event,'sub-tab-policies')">Policies</button>
+        <button class="sub-tab-btn" onclick="switchSubTab(event,'sub-tab-infra')">Infrastructure</button>
+      </div>
+
+      <!-- ── SUB-TAB: POLICIES ── -->
+      <div class="sub-tab-panel active" id="sub-tab-policies">
+        <div class="viz-ph" style="height:380px;" id="h2h-stock-share-container">
+          <div class="ph-icon">📊</div>
+          <div class="ph-text">
+            EV stock share over time with policy event markers<br/>
+            <span style="font-size:0.57rem;opacity:0.7">All selected countries on same axis</span>
+          </div>
+          <div class="ph-badge">→ Observable: compare-stock-share</div>
+        </div>
+      </div>
+
+      <!-- ── SUB-TAB: INFRASTRUCTURE ── -->
+      <div class="sub-tab-panel" id="sub-tab-infra">
+        <div id="compare-infra-chart-container" style="width:100%;min-height:400px;"></div>
+      </div>
+
+    </div>
+
+  </div><!-- /tabs-wrap -->
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <div class="footer-name">Alexandra Bauche, Anna Mowat, Shengmin Xiao</div>
+      <div class="footer-sub">IEA Global EV Data Explorer · 63+ Countries · 2010–2024 · UC Berkeley MIDS W209</div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+
+  // ── State ────────────────────────────────────────────────────────────────
+  let selectedCountry = null;
+  let compareCountries = [];
+
+  // ── Country selection ────────────────────────────────────────────────────
+  function selectCountry(country) {
+    if (!country) return; 
+    selectedCountry = country;
+    updateDashboard(country);
+    if (window.redefineInfra) window.redefineInfra(country);
+    if (window.redefineCompare) {
+      const c1 = document.getElementById('compare-select-1').value || null;
+      const c2 = document.getElementById('compare-select-2').value || null;
+      window.redefineCompare(c1, c2);
+    }
+  }
+
+  function updateDashboard(country) {
+    document.getElementById('kpi-stock-share').textContent     = '—';
+    document.getElementById('kpi-stock-delta').textContent     = '…';
+    document.getElementById('kpi-sales-share').textContent     = '—';
+    document.getElementById('kpi-sales-delta').textContent     = '…';
+    document.getElementById('kpi-charger-density').textContent = '—';
+    document.getElementById('kpi-charger-delta').textContent   = '…';
+
+    document.getElementById('policy-list').innerHTML = `
+      <div class="policy-item">
+        <div class="policy-year">—</div>
+        <div class="policy-body">
+          <div class="policy-title">Loading policies for ${country}…</div>
+          <div class="policy-desc">Filtered by selected vehicle mode where IEA data permits.</div>
+        </div>
+      </div>`;
+  }
+
+  // ── Sub-tab switching (Compare Countries) ───────────────────────────────
+  function switchSubTab(e, id) {
+    document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.sub-tab-panel').forEach(p => p.classList.remove('active'));
+    e.currentTarget.classList.add('active');
+    document.getElementById(id).classList.add('active');
+
+    if (id === 'sub-tab-infra' && window.mainInfra) {
+      const w = document.getElementById('compare-infra-chart-container').clientWidth;
+      window.mainInfra.redefine("width", w);
+    }
+  }
+
+  // ── Tab switching ────────────────────────────────────────────────────────
+  function switchTab(e, id) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    e.currentTarget.classList.add('active');
+    document.getElementById(id).classList.add('active');
+
+    // initialize the infra width lazily — only set it when the tab becomes visible
+    if (id === 'tab-infra' && window.mainInfra) {
+      const w = document.getElementById('infra-chart-container').clientWidth;
+      window.mainInfra.redefine("width", w);
+      // push current country selection after width is set
+      const current = document.getElementById('country-select').value || null;
+      window.mainInfra.redefine("selectedCountry", current);
+    }
+    if (id === 'tab-headtohead' && window.mainInfra) {
+      const w = document.getElementById('compare-infra-chart-container').clientWidth;
+      if (w > 0) window.mainInfra.redefine("width", w);
+    }
+  }
+
+  // ── Pill groups (independent per group name) ─────────────────────────────
+  const modeMap = {
+    'cars': 'Cars', 'buses': 'Buses', 'trucks': 'Trucks',
+    '2w3w': '2 and 3 wheelers', 'vans': 'Vans'
+  };
+  const metricMap = {
+    'ev_stock': 'EV stock', 'ev_stock_share': 'EV stock share',
+    'ev_sales': 'EV sales', 'ev_sales_share': 'EV sales share'
+  };
+
+  function setPill(el, group, value) {
+    el.closest('.pill-group').querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    if (group === 'mode'   && window.redefineRegional) window.redefineRegional("selectedMode",   modeMap[value]   || value);
+    if (group === 'metric' && window.redefineRegional) window.redefineRegional("selectedMetric", metricMap[value] || value);
+  }
+
+  // ── Head-to-head compare dropdowns ──────────────────────────────────────
+  function updateCompare() {
+    const c1 = document.getElementById('compare-select-1').value;
+    const c2 = document.getElementById('compare-select-2').value;
+    compareCountries = [c1, c2].filter(Boolean);
+    if (window.redefineCompare) window.redefineCompare(c1 || null, c2 || null);
+  }
+
+  // ── Year slider ──────────────────────────────────────
+  function setTreemapYear(value) {
+    document.getElementById("treemap-year-label").textContent = value;
+    const pct = ((value - 2010) / (2024 - 2010)) * 100;
+    document.getElementById("treemap-year").style.background =
+      `linear-gradient(to right, var(--accent) ${pct}%, rgba(255,255,255,0.15) ${pct}%)`;
+    if (window.redefineTreemap) window.redefineTreemap("selectedYear", +value);
+  }
+
+  /*
+  ── Observable Runtime embed — move to <script type="module"> block below
+  ─────────────────────────────────────────────────────────────────────────── */
+</script>
+
+<script type="module">
+  import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+  import defineRegional from "https://api.observablehq.com/d/c4630f575603dac8.js?v=4";
+  import defineInfra from "https://api.observablehq.com/d/e376a97e453dc905.js?v=4";
+
+  const runtime = new Runtime();
+  const container = document.getElementById("regional-chart-container");
+  const infraContainer = document.getElementById("infra-chart-container");
+  const compareInfraContainer = document.getElementById("compare-infra-chart-container");
+
+  const mainRegional = runtime.module(defineRegional, name => {
+    if (name === "regionalTrendChart") return new Inspector(container);
+    if (name === "countryList") return {
+      fulfilled(countries) {
+        const makeOpts = (placeholder) =>
+          `<option value="">${placeholder}</option>` +
+          countries.map(c => `<option value="${c}">${c}</option>`).join("");
+
+        document.getElementById("country-select").innerHTML = makeOpts("Select a country…");
+        document.getElementById("compare-select-1").innerHTML = makeOpts("Country 1…");
+        document.getElementById("compare-select-2").innerHTML = makeOpts("Country 2…");
+      }
+    };
+  });
+
+  const mainInfra = runtime.module(defineInfra, name => {
+    if (name === "infraChart")        return new Inspector(infraContainer);
+    if (name === "compareInfraChart") return new Inspector(compareInfraContainer);
+    if (name === "kpiValues") return {
+      fulfilled(v) {
+        // Stock share
+        document.getElementById("kpi-stock-share").textContent =
+          v.stockShare != null ? `${v.stockShare.toFixed(2)}%` : "—";
+        document.getElementById("kpi-stock-delta").textContent =
+          v.stockDelta != null
+            ? `${v.stockDelta >= 0 ? "↑" : "↓"} ${v.stockDelta >= 0 ? "+" : ""}${v.stockDelta.toFixed(1)}pp YoY`
+            : "No YoY data";
+
+        // Sales share
+        document.getElementById("kpi-sales-share").textContent =
+          v.salesShare != null ? `${v.salesShare.toFixed(2)}%` : "—";
+        document.getElementById("kpi-sales-delta").textContent =
+          v.salesDelta != null
+            ? `${v.salesDelta >= 0 ? "↑" : "↓"} ${v.salesDelta >= 0 ? "+" : ""}${v.salesDelta.toFixed(1)}pp YoY`
+            : "No YoY data";
+
+        // Charger density
+        document.getElementById("kpi-charger-density").textContent =
+          v.chargingDensity != null ? v.chargingDensity.toFixed(1) : "—";
+        document.getElementById("kpi-charger-delta").textContent =
+          v.chargingDelta != null
+            ? `${v.chargingDelta >= 0 ? "↑" : "↓"} ${v.chargingDelta >= 0 ? "+" : ""}${v.chargingDelta.toFixed(1)} YoY`
+            : "No YoY data";
+      }
+    };
+  });
+  // the width is only passed to Observable once the container is actually visible and has a real pixel width
+  window.mainInfra = mainInfra;
+
+  // Set initial width from container
+  mainRegional.redefine("width", container.clientWidth);
+  mainInfra.redefine("width", infraContainer.clientWidth);
+
+  // Keep width responsive on resize
+  const ro = new ResizeObserver(entries => {
+    for (const entry of entries) {
+      mainRegional.redefine("width", entry.contentRect.width);
+    }
+  });
+  ro.observe(container);
+
+  // Wire pills to Observable
+  window.redefineRegional = (key, value) => {
+    if (key === "selectedMode")   mainRegional.redefine("selectedMode", value);
+    if (key === "selectedMetric") mainRegional.redefine("selectedMetric", value);
+  };
+
+  window.redefineInfra = (country) => {
+    mainInfra.redefine("selectedCountry", country);
+  };
+
+  window.redefineCompare = (c1, c2) => {
+    mainInfra.redefine("compareCountry1", c1);
+    mainInfra.redefine("compareCountry2", c2);
+  };
+
+</script>
+
+</body>
+</html>
