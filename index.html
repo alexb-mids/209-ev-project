@@ -1120,15 +1120,8 @@
         </div>
       </div>
 
-      <!-- Policy chart placeholder -->
-      <div class="viz-ph" style="height:300px;" id="policy-chart-container">
-        <div class="ph-icon">📋</div>
-        <div class="ph-text">
-          EV stock share over time with policy event markers<br/>
-          <span style="font-size:0.57rem;opacity:0.7">Demand incentives · Supply mandates · Announced targets</span>
-        </div>
-        <div class="ph-badge">→ Observable cell: policy-timeline-chart</div>
-      </div>
+      <!-- Policy chart -->
+      <div id="policy-chart-container" style="width:100%;min-height:300px;"></div>
 
       <!-- Policy list -->
       <div style="margin-top:20px;">
@@ -1267,6 +1260,7 @@
   // ── State ────────────────────────────────────────────────────────────────
   let selectedCountry = null;
   let compareCountries = [];
+  let selectedPolicyMode = 'Cars'; // tracks active vehicle mode in the Policies tab
 
   // ── Country selection ────────────────────────────────────────────────────
   function selectCountry(country) {
@@ -1274,6 +1268,7 @@
     selectedCountry = country;
     updateDashboard(country);
     if (window.redefineInfra) window.redefineInfra(country);
+    if (window.redefinePolicy) window.redefinePolicy(country, selectedPolicyMode);
     if (window.redefineCompare) {
       const c1 = document.getElementById('compare-select-1').value || null;
       const c2 = document.getElementById('compare-select-2').value || null;
@@ -1331,6 +1326,12 @@
       const w = document.getElementById('compare-infra-chart-container').clientWidth;
       if (w > 0) window.mainInfra.redefine("width", w);
     }
+    // push width + current state to policy chart when Policies tab becomes visible
+    if (id === 'tab-policies' && window.mainPolicy) {
+      const w = document.getElementById('policy-chart-container').clientWidth;
+      if (w > 0) window.mainPolicy.redefine("width", w);
+      if (window.redefinePolicy) window.redefinePolicy(selectedCountry, selectedPolicyMode);
+    }
   }
 
   // ── Pill groups (independent per group name) ─────────────────────────────
@@ -1348,6 +1349,10 @@
     el.classList.add('active');
     if (group === 'mode'   && window.redefineRegional) window.redefineRegional("selectedMode",   modeMap[value]   || value);
     if (group === 'metric' && window.redefineRegional) window.redefineRegional("selectedMetric", metricMap[value] || value);
+    if (group === 'policy-mode') {
+      selectedPolicyMode = modeMap[value] || value;
+      if (window.redefinePolicy) window.redefinePolicy(selectedCountry, selectedPolicyMode);
+    }
   }
 
   // ── Head-to-head compare dropdowns ──────────────────────────────────────
@@ -1376,11 +1381,14 @@
   import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
   import defineRegional from "https://api.observablehq.com/d/c4630f575603dac8.js?v=4";
   import defineInfra from "https://api.observablehq.com/d/e376a97e453dc905.js?v=4";
+  import policyChart from "https://api.observablehq.com/d/acc3be41c3b5ec8a.js?v=4";
 
   const runtime = new Runtime();
   const container = document.getElementById("regional-chart-container");
   const infraContainer = document.getElementById("infra-chart-container");
   const compareInfraContainer = document.getElementById("compare-infra-chart-container");
+  const policyContainer = document.getElementById("policy-chart-container");
+
 
   const mainRegional = runtime.module(defineRegional, name => {
     if (name === "regionalTrendChart") return new Inspector(container);
@@ -1428,12 +1436,25 @@
       }
     };
   });
+
+  const mainPolicy = runtime.module(policyChart, name => {
+    if (name === "policyChart") return new Inspector(policyContainer);
+    if (name === "selectedCountry") return {
+      fulfilled(country) {
+        selectedCountry = country;
+        updateDashboard(country);
+      }
+    };
+  });
+
   // the width is only passed to Observable once the container is actually visible and has a real pixel width
   window.mainInfra = mainInfra;
+  window.mainPolicy = mainPolicy;
 
   // Set initial width from container
   mainRegional.redefine("width", container.clientWidth);
   mainInfra.redefine("width", infraContainer.clientWidth);
+  // policy chart width pushed lazily on tab switch (container has 0px width before first paint)
 
   // Keep width responsive on resize
   const ro = new ResizeObserver(entries => {
@@ -1443,6 +1464,13 @@
   });
   ro.observe(container);
 
+  const roPolicy = new ResizeObserver(entries => {
+    for (const entry of entries) {
+      if (entry.contentRect.width > 0) mainPolicy.redefine("width", entry.contentRect.width);
+    }
+  });
+  roPolicy.observe(policyContainer);
+
   // Wire pills to Observable
   window.redefineRegional = (key, value) => {
     if (key === "selectedMode")   mainRegional.redefine("selectedMode", value);
@@ -1451,6 +1479,12 @@
 
   window.redefineInfra = (country) => {
     mainInfra.redefine("selectedCountry", country);
+  };
+
+  // Single function to push both country and mode to the policy chart
+  window.redefinePolicy = (country, mode) => {
+    if (country) try { mainPolicy.redefine("selectedCountry", country); } catch(e) {}
+    if (mode)    try { mainPolicy.redefine("selectedMode", mode); }    catch(e) {}
   };
 
   window.redefineCompare = (c1, c2) => {
