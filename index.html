@@ -1020,18 +1020,11 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="treemap-ph" id="treemap-container">
-      <div class="ph-icon">▦</div>
-      <div class="ph-text">
-        Country Treemap<br/>
-        <span style="font-size:0.58rem">Area = EV stock share · Color = EV sales share · Click a country to drill down</span>
-      </div>
-      <div class="ph-badge">→ Observable cell: country-treemap</div>
-    </div>
+    <div id="treemap-container" style="width:100%; min-height:520px;"></div>
   </div>
   <div class="card-footer">
     <div class="footer-note">
-      <strong style="color:var(--accent)">Select a country below</strong> to drill down into country-level analysis · Source: IEA Global EV Data Explorer
+      Distribution of EV adoption across countries · Size = EV share · Color = total car sales
     </div>
   </div>
 </div>
@@ -1258,17 +1251,18 @@
 <script>
 
   // ── State ────────────────────────────────────────────────────────────────
-  let selectedCountry = null;
-  let compareCountries = [];
-  let selectedPolicyMode = 'Cars'; // tracks active vehicle mode in the Policies tab
+  window.selectedCountry = null;
+  window.compareCountries = [];
+  window.selectedPolicyMode = 'Cars';
+
 
   // ── Country selection ────────────────────────────────────────────────────
   function selectCountry(country) {
     if (!country) return; 
-    selectedCountry = country;
+    window.selectedCountry = country;
     updateDashboard(country);
     if (window.redefineInfra) window.redefineInfra(country);
-    if (window.redefinePolicy) window.redefinePolicy(country, selectedPolicyMode);
+    if (window.redefinePolicy) window.redefinePolicy(country, window.selectedPolicyMode);
     if (window.redefineCompare) {
       const c1 = document.getElementById('compare-select-1').value || null;
       const c2 = document.getElementById('compare-select-2').value || null;
@@ -1293,7 +1287,9 @@
         </div>
       </div>`;
   }
+  window.updateDashboard = updateDashboard;
 
+  
   // ── Sub-tab switching (Compare Countries) ───────────────────────────────
   function switchSubTab(e, id) {
     document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
@@ -1330,7 +1326,7 @@
     if (id === 'tab-policies' && window.mainPolicy) {
       const w = document.getElementById('policy-chart-container').clientWidth;
       if (w > 0) window.mainPolicy.redefine("width", w);
-      if (window.redefinePolicy) window.redefinePolicy(selectedCountry, selectedPolicyMode);
+      if (window.redefinePolicy) window.redefinePolicy(window.selectedCountry, window.selectedPolicyMode);
     }
   }
 
@@ -1350,8 +1346,11 @@
     if (group === 'mode'   && window.redefineRegional) window.redefineRegional("selectedMode",   modeMap[value]   || value);
     if (group === 'metric' && window.redefineRegional) window.redefineRegional("selectedMetric", metricMap[value] || value);
     if (group === 'policy-mode') {
-      selectedPolicyMode = modeMap[value] || value;
-      if (window.redefinePolicy) window.redefinePolicy(selectedCountry, selectedPolicyMode);
+      window.selectedPolicyMode = modeMap[value] || value;
+      if (window.redefinePolicy) window.redefinePolicy(window.selectedCountry, window.selectedPolicyMode);
+    }
+    if (group === 'treemap-mode') {
+      if (window.redefineTreemap) window.redefineTreemap("selectedMode", modeMap[value] || value);
     }
   }
 
@@ -1359,7 +1358,7 @@
   function updateCompare() {
     const c1 = document.getElementById('compare-select-1').value;
     const c2 = document.getElementById('compare-select-2').value;
-    compareCountries = [c1, c2].filter(Boolean);
+    window.compareCountries = [c1, c2].filter(Boolean);
     if (window.redefineCompare) window.redefineCompare(c1 || null, c2 || null);
   }
 
@@ -1382,13 +1381,14 @@
   import defineRegional from "https://api.observablehq.com/d/c4630f575603dac8.js?v=4";
   import defineInfra from "https://api.observablehq.com/d/e376a97e453dc905.js?v=4";
   import policyChart from "https://api.observablehq.com/d/acc3be41c3b5ec8a.js?v=4";
+  import defineTreemap from "https://api.observablehq.com/d/7cb860f377bba4ea.js?v=4";
 
   const runtime = new Runtime();
   const container = document.getElementById("regional-chart-container");
   const infraContainer = document.getElementById("infra-chart-container");
   const compareInfraContainer = document.getElementById("compare-infra-chart-container");
   const policyContainer = document.getElementById("policy-chart-container");
-
+  const treemapContainer = document.getElementById("treemap-container");
 
   const mainRegional = runtime.module(defineRegional, name => {
     if (name === "regionalTrendChart") return new Inspector(container);
@@ -1403,6 +1403,10 @@
         document.getElementById("compare-select-2").innerHTML = makeOpts("Country 2…");
       }
     };
+  });
+
+  const mainTreemap = runtime.module(defineTreemap, name => {
+    if (name === "treemap") return new Inspector(treemapContainer);
   });
 
   const mainInfra = runtime.module(defineInfra, name => {
@@ -1441,8 +1445,8 @@
     if (name === "policyChart") return new Inspector(policyContainer);
     if (name === "selectedCountry") return {
       fulfilled(country) {
-        selectedCountry = country;
-        updateDashboard(country);
+        window.selectedCountry = country;
+        window.updateDashboard(country);
       }
     };
   });
@@ -1454,6 +1458,7 @@
   // Set initial width from container
   mainRegional.redefine("width", container.clientWidth);
   mainInfra.redefine("width", infraContainer.clientWidth);
+  mainTreemap.redefine("width", treemapContainer.clientWidth);
   // policy chart width pushed lazily on tab switch (container has 0px width before first paint)
 
   // Keep width responsive on resize
@@ -1470,6 +1475,17 @@
     }
   });
   roPolicy.observe(policyContainer);
+
+
+  const roTreemap = new ResizeObserver(entries => {
+    for (const entry of entries) {
+      if (entry.contentRect.width > 0) {
+        mainTreemap.redefine("width", entry.contentRect.width);
+      }
+    }
+  });
+  roTreemap.observe(treemapContainer);
+
 
   // Wire pills to Observable
   window.redefineRegional = (key, value) => {
@@ -1492,7 +1508,14 @@
     mainInfra.redefine("compareCountry2", c2);
   };
 
+  window.redefineTreemap = (key, value) => {
+    try {
+      mainTreemap.redefine(key, value);
+    } catch (e) {}
+  };
+
 </script>
+
 
 </body>
 </html>
