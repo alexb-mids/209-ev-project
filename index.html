@@ -987,7 +987,7 @@
     </div>
     <div class="card-footer">
       <div class="footer-note">
-        Select a <strong style="color:var(--text-2)">vehicle mode</strong> and <strong style="color:var(--text-2)">metric</strong> above to update the chart · Source: IEA Global EV Data Explorer
+        Select a <strong style="color:var(--accent)">vehicle mode</strong> and <strong style="color:var(--accent)">metric</strong> above to update the chart
       </div>
     </div>
   </div>
@@ -1024,7 +1024,7 @@
   </div>
   <div class="card-footer">
     <div class="footer-note">
-      Distribution of EV adoption across countries · Size = EV share · Color = total car sales
+            Select a <strong style="color:var(--accent)">year</strong> and <strong style="color:var(--accent)">vehicle mode</strong> above to update the chart | Treemap encoding: Size = EV Sales Share · Color = Total Vehicle Sold
     </div>
   </div>
 </div>
@@ -1219,14 +1219,7 @@
 
       <!-- ── SUB-TAB: POLICIES ── -->
       <div class="sub-tab-panel active" id="sub-tab-policies">
-        <div class="viz-ph" style="height:380px;" id="h2h-stock-share-container">
-          <div class="ph-icon">📊</div>
-          <div class="ph-text">
-            EV stock share over time with policy event markers<br/>
-            <span style="font-size:0.57rem;opacity:0.7">All selected countries on same axis</span>
-          </div>
-          <div class="ph-badge">→ Observable: compare-stock-share</div>
-        </div>
+        <div id="compare-policy-chart-container" style="width:100%;min-height:380px;"></div>
       </div>
 
       <!-- ── SUB-TAB: INFRASTRUCTURE ── -->
@@ -1251,18 +1244,17 @@
 <script>
 
   // ── State ────────────────────────────────────────────────────────────────
-  window.selectedCountry = null;
-  window.compareCountries = [];
-  window.selectedPolicyMode = 'Cars';
-
+  let selectedCountry = null;
+  let compareCountries = [];
+  let selectedPolicyMode = 'Cars'; // tracks active vehicle mode in the Policies tab
 
   // ── Country selection ────────────────────────────────────────────────────
   function selectCountry(country) {
     if (!country) return; 
-    window.selectedCountry = country;
+    selectedCountry = country;
     updateDashboard(country);
     if (window.redefineInfra) window.redefineInfra(country);
-    if (window.redefinePolicy) window.redefinePolicy(country, window.selectedPolicyMode);
+    if (window.redefinePolicy) window.redefinePolicy(country, selectedPolicyMode);
     if (window.redefineCompare) {
       const c1 = document.getElementById('compare-select-1').value || null;
       const c2 = document.getElementById('compare-select-2').value || null;
@@ -1287,8 +1279,6 @@
         </div>
       </div>`;
   }
-  window.updateDashboard = updateDashboard;
-
   
   // ── Sub-tab switching (Compare Countries) ───────────────────────────────
   function switchSubTab(e, id) {
@@ -1300,6 +1290,14 @@
     if (id === 'sub-tab-infra' && window.mainInfra) {
       const w = document.getElementById('compare-infra-chart-container').clientWidth;
       window.mainInfra.redefine("width", w);
+    }
+    if (id === 'sub-tab-policies' && window.mainPolicy) {
+      const w = document.getElementById('compare-policy-chart-container').clientWidth;
+      if (w > 0) window.mainPolicy.redefine("width", w);
+      const c1 = document.getElementById('compare-select-1').value || null;
+      const c2 = document.getElementById('compare-select-2').value || null;
+      try { window.mainPolicy.redefine("compareCountry1", c1); } catch(e) {}
+      try { window.mainPolicy.redefine("compareCountry2", c2); } catch(e) {}
     }
   }
 
@@ -1322,11 +1320,15 @@
       const w = document.getElementById('compare-infra-chart-container').clientWidth;
       if (w > 0) window.mainInfra.redefine("width", w);
     }
+    if (id === 'tab-headtohead' && window.mainPolicy) {
+      const w = document.getElementById('compare-policy-chart-container').clientWidth;
+      if (w > 0) window.mainPolicy.redefine("width", w);
+    }
     // push width + current state to policy chart when Policies tab becomes visible
     if (id === 'tab-policies' && window.mainPolicy) {
       const w = document.getElementById('policy-chart-container').clientWidth;
       if (w > 0) window.mainPolicy.redefine("width", w);
-      if (window.redefinePolicy) window.redefinePolicy(window.selectedCountry, window.selectedPolicyMode);
+      if (window.redefinePolicy) window.redefinePolicy(selectedCountry, selectedPolicyMode);
     }
   }
 
@@ -1346,8 +1348,8 @@
     if (group === 'mode'   && window.redefineRegional) window.redefineRegional("selectedMode",   modeMap[value]   || value);
     if (group === 'metric' && window.redefineRegional) window.redefineRegional("selectedMetric", metricMap[value] || value);
     if (group === 'policy-mode') {
-      window.selectedPolicyMode = modeMap[value] || value;
-      if (window.redefinePolicy) window.redefinePolicy(window.selectedCountry, window.selectedPolicyMode);
+      selectedPolicyMode = modeMap[value] || value;
+      if (window.redefinePolicy) window.redefinePolicy(selectedCountry, selectedPolicyMode);
     }
     if (group === 'treemap-mode') {
       if (window.redefineTreemap) window.redefineTreemap("selectedMode", modeMap[value] || value);
@@ -1358,7 +1360,7 @@
   function updateCompare() {
     const c1 = document.getElementById('compare-select-1').value;
     const c2 = document.getElementById('compare-select-2').value;
-    window.compareCountries = [c1, c2].filter(Boolean);
+    compareCountries = [c1, c2].filter(Boolean);
     if (window.redefineCompare) window.redefineCompare(c1 || null, c2 || null);
   }
 
@@ -1388,6 +1390,7 @@
   const infraContainer = document.getElementById("infra-chart-container");
   const compareInfraContainer = document.getElementById("compare-infra-chart-container");
   const policyContainer = document.getElementById("policy-chart-container");
+  const comparePolicyContainer = document.getElementById("compare-policy-chart-container");
   const treemapContainer = document.getElementById("treemap-container");
 
   const mainRegional = runtime.module(defineRegional, name => {
@@ -1441,12 +1444,56 @@
     };
   });
 
+  const categoryColors = {
+    "LDV":           { bg: "rgba(230,255,148,0.12)", color: "var(--accent)",       border: "var(--accent-border)" },
+    "M/HDV":         { bg: "rgba(64,165,120,0.15)",  color: "var(--teal-mid)",     border: "rgba(64,165,120,0.3)" },
+    "EVSE":          { bg: "rgba(89,200,255,0.12)",  color: "#59c8ff",             border: "rgba(89,200,255,0.3)" },
+    "Taxation":      { bg: "rgba(245,166,35,0.12)",  color: "#f5a623",             border: "rgba(245,166,35,0.3)" },
+    "Manufacturing": { bg: "rgba(157,222,139,0.1)",  color: "var(--green-light)",  border: "rgba(157,222,139,0.3)" },
+    "Multiple":      { bg: "rgba(255,255,255,0.08)", color: "var(--text-2)",       border: "var(--border-2)" },
+  };
+
+  function renderPolicyList(policies) {
+    const list = document.getElementById("policy-list");
+    if (!list) return;
+    if (!policies || policies.length === 0) {
+      list.innerHTML = `<div class="policy-item">
+        <div class="policy-year">—</div>
+        <div class="policy-body">
+          <div class="policy-title">No policies found for this country / mode.</div>
+        </div>
+      </div>`;
+      return;
+    }
+    const sorted = [...policies].sort((a, b) => b.year - a.year);
+    list.innerHTML = sorted.map(d => {
+      const col = categoryColors[d.category] || categoryColors["Multiple"];
+      const tagStyle = `background:${col.bg};color:${col.color};border:1px solid ${col.border};`;
+      const levelTag = d.level ? `<span class="policy-tag" style="${tagStyle}">${d.level}</span>` : "";
+      const typeTag  = d.type  ? `<span class="policy-tag" style="${tagStyle}">${d.type}</span>`  : "";
+      const catTag   = d.category ? `<span class="policy-tag" style="${tagStyle}">${d.category}</span>` : "";
+      return `<div class="policy-item">
+        <div class="policy-year">${d.year}</div>
+        <div class="policy-body">
+          <div class="policy-title">${d.measure || "—"}</div>
+          <div style="margin-top:6px;">${catTag}${typeTag}${levelTag}</div>
+        </div>
+      </div>`;
+    }).join("");
+  }
+
   const mainPolicy = runtime.module(policyChart, name => {
-    if (name === "policyChart") return new Inspector(policyContainer);
+    if (name === "policyChart")        return new Inspector(policyContainer);
+    if (name === "comparePolicyChart") return new Inspector(comparePolicyContainer);
     if (name === "selectedCountry") return {
       fulfilled(country) {
-        window.selectedCountry = country;
-        window.updateDashboard(country);
+        selectedCountry = country;
+        updateDashboard(country);
+      }
+    };
+    if (name === "policyData") return {
+      fulfilled(policies) {
+        renderPolicyList(policies);
       }
     };
   });
@@ -1476,6 +1523,12 @@
   });
   roPolicy.observe(policyContainer);
 
+  const roComparePolicy = new ResizeObserver(entries => {
+  for (const entry of entries) {
+      if (entry.contentRect.width > 0) mainPolicy.redefine("width", entry.contentRect.width);
+    }
+  });
+  roComparePolicy.observe(comparePolicyContainer);
 
   const roTreemap = new ResizeObserver(entries => {
     for (const entry of entries) {
@@ -1506,6 +1559,8 @@
   window.redefineCompare = (c1, c2) => {
     mainInfra.redefine("compareCountry1", c1);
     mainInfra.redefine("compareCountry2", c2);
+    try { mainPolicy.redefine("compareCountry1", c1); } catch(e) {}
+    try { mainPolicy.redefine("compareCountry2", c2); } catch(e) {}
   };
 
   window.redefineTreemap = (key, value) => {
