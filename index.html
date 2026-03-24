@@ -1488,7 +1488,6 @@
     if (name === "selectedCountry") return {
       fulfilled(country) {
         selectedCountry = country;
-        updateDashboard(country);
       }
     };
     if (name === "policyData") return {
