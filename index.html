@@ -276,6 +276,225 @@
       background: var(--border);
     }
 
+    /* ─── METRICS PRIMER BOX ─── */
+    .metrics-primer {
+      background: rgba(0,0,0,0.12);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s 0.14s ease both;
+    }
+
+    .metrics-primer-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .metrics-primer-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--accent-glow);
+      border: 1px solid var(--accent-border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+    }
+
+    .metrics-primer-title {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-1);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .metric-item {
+      background: rgba(0,0,0,0.15);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      transition: border-color 0.2s;
+    }
+
+    .metric-item:hover {
+      border-color: var(--border-2);
+    }
+
+    .metric-item.primary {
+      border-color: var(--accent-border);
+      background: var(--accent-glow2);
+    }
+
+    .metric-name {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .metric-item:not(.primary) .metric-name {
+      color: var(--text-3);
+    }
+
+    .metric-primary-badge {
+      font-size: 0.5rem;
+      background: var(--accent);
+      color: var(--teal-deep);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    .metric-def {
+      font-size: 0.8rem;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+
+    .metrics-primer-note {
+      font-size: 0.78rem;
+      color: var(--text-3);
+      line-height: 1.6;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .metrics-primer-note strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* ─── COLLAPSIBLE ─── */
+    .collapsible-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: margin-bottom 0.2s;
+    }
+
+    .collapsible-header:hover .collapse-text {
+      color: var(--accent);
+    }
+
+    .collapsible.open .collapse-icon {
+      transform: rotate(90deg);
+    }
+
+    .collapsible-content {
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.2s ease;
+    }
+
+    /* ─── INFO ICON TOOLTIPS ─── */
+    .info-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.55rem;
+      font-weight: 600;
+      color: var(--text-4);
+      cursor: default;
+      position: relative;
+      transition: all 0.18s;
+      flex-shrink: 0;
+      text-transform: none;
+    }
+
+    .info-icon:hover {
+      background: var(--accent-glow);
+      border-color: var(--accent-border);
+      color: var(--accent);
+    }
+
+    .info-icon::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,20,20,0.95);
+      border: 1px solid var(--border-2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 0.75rem;
+      text-transform: none;
+      letter-spacing: normal;
+      font-weight: 400;
+      color: var(--text-2);
+      line-height: 1.5;
+      white-space: normal;
+      width: 220px;
+      text-align: left;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      pointer-events: none;
+    }
+
+    .info-icon::before {
+      content: '';
+      position: absolute;
+      bottom: calc(100% + 2px);
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: rgba(0,20,20,0.95);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      z-index: 101;
+    }
+
+    .info-icon:hover::after,
+    .info-icon:hover::before {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Wider tooltip for longer explanations */
+    .info-icon.wide::after {
+      width: 280px;
+    }
+
+    /* Tooltip appears below instead of above */
+    .info-icon.info-icon-below::after {
+      bottom: auto;
+      top: calc(100% + 8px);
+      width: 260px;
+    }
+
+    .info-icon.info-icon-below::before {
+      bottom: auto;
+      top: calc(100% + 2px);
+      border-top-color: transparent;
+      border-bottom-color: rgba(0,20,20,0.95);
+    }
+
     /* ─── CARD ─── */
     .card {
       background: rgba(0,0,0,0.18);
@@ -322,6 +541,12 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 3px;
+    }
+
+    .pill-group-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .pill {
@@ -592,6 +817,9 @@
       text-transform: uppercase;
       color: var(--text-4);
       margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .k-val {
@@ -909,6 +1137,19 @@
 
     .sub-tab-panel { display: none; }
     .sub-tab-panel.active { display: block; animation: panelIn 0.25s ease; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -956,6 +1197,40 @@
   </header>
 
   <!-- ═══════════════════════════════════════════════════
+       METRICS PRIMER — Understanding the Data
+  ═══════════════════════════════════════════════════ -->
+  <div class="metrics-primer">
+    <div class="metrics-primer-header">
+      <div class="metrics-primer-icon">💡</div>
+      <div class="metrics-primer-title">Understanding the Metrics</div>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-item primary">
+        <div class="metric-name">
+          EV Stock Share
+          <span class="metric-primary-badge">Primary</span>
+        </div>
+        <div class="metric-def">EVs as a percentage of all vehicles currently on the road — the main comparison metric.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">EV Stock</div>
+        <div class="metric-def">Total number of EVs in the fleet (cumulative count of vehicles on the road).</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">EV Sales Share</div>
+        <div class="metric-def">New EVs as a percentage of all new vehicles sold in a given year.</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-name">EV Sales</div>
+        <div class="metric-def">Absolute number of new EVs sold in a given year.</div>
+      </div>
+    </div>
+    <div class="metrics-primer-note">
+      <strong>Why stock share?</strong> Absolute numbers favor large countries like China over adoption leaders like Norway. Stock share reveals true electrification progress regardless of population or fleet size.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
        SECTION 1 — GLOBAL OVERVIEW
   ═══════════════════════════════════════════════════ -->
   <div class="section-row"><span class="s-label">Global Overview</span></div>
@@ -965,20 +1240,23 @@
     <div class="card-header">
       <div class="card-title">EV Adoption by Region</div>
       <div style="display:flex;gap:8px;align-items:center;">
-        <!-- Mode selector -->
+        <!-- Mode selector with info icon -->
+        <div class="pill-group-wrapper">
         <div class="pill-group">
           <button class="pill active" onclick="setPill(this,'mode','cars')">Cars</button>
+          <button class="pill" onclick="setPill(this,'mode','2w3w')">2/3W</button>
           <button class="pill" onclick="setPill(this,'mode','buses')">Buses</button>
           <button class="pill" onclick="setPill(this,'mode','trucks')">Trucks</button>
-          <button class="pill" onclick="setPill(this,'mode','2w3w')">2/3W</button>
           <button class="pill" onclick="setPill(this,'mode','vans')">Vans</button>
+        </div>
+          <span class="info-icon info-icon-below" data-tooltip="2/3W = two- and three-wheelers (scooters, motorcycles, e-rickshaws). Buses, Trucks, Vans = commercial vehicles.">i</span>
         </div>
         <!-- Metric selector -->
         <div class="pill-group">
           <button class="pill active" onclick="setPill(this,'metric','ev_stock_share')">Stock Share</button>
-          <button class="pill" onclick="setPill(this,'metric','ev_stock')">EV Stock</button>
+          <button class="pill" onclick="setPill(this,'metric','ev_stock')">Stock</button>
           <button class="pill" onclick="setPill(this,'metric','ev_sales_share')">Sales Share</button>
-          <button class="pill" onclick="setPill(this,'metric','ev_sales')">EV Sales</button>
+          <button class="pill" onclick="setPill(this,'metric','ev_sales')">Sales</button>
         </div>
       </div>
     </div>
@@ -999,6 +1277,17 @@
       Country-Level Distribution
     </div>
     <div style="display:flex;align-items:center;gap:12px;">
+      <!-- Mode selector with info icon -->
+      <div class="pill-group-wrapper">
+      <div class="pill-group">
+        <button class="pill active" onclick="setPill(this,'treemap-mode','cars')">Cars</button>
+        <button class="pill" onclick="setPill(this,'treemap-mode','2w3w')">2/3W</button>
+        <button class="pill" onclick="setPill(this,'treemap-mode','buses')">Buses</button>
+        <button class="pill" onclick="setPill(this,'treemap-mode','trucks')">Trucks</button>
+        <button class="pill" onclick="setPill(this,'treemap-mode','vans')">Vans</button>
+      </div>
+        <span class="info-icon info-icon-below" data-tooltip="2/3W = two- and three-wheelers (scooters, motorcycles, e-rickshaws). Buses, Trucks, Vans = commercial vehicles.">i</span>
+      </div>
       <!-- Year slider -->
       <div style="display:flex;align-items:center;gap:8px;">
         <span style="font-family:'Geist Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;color:var(--text-4);">Year</span>
@@ -1008,14 +1297,6 @@
             background:linear-gradient(to right, var(--accent) 100%, rgba(255,255,255,0.15) 100%);
             outline:none;cursor:pointer;">
         <span class="year-tag" id="treemap-year-label">2024</span>
-      </div>
-      <!-- Mode pills -->
-      <div class="pill-group">
-        <button class="pill active" onclick="setPill(this,'treemap-mode','cars')">Cars</button>
-        <button class="pill" onclick="setPill(this,'treemap-mode','buses')">Buses</button>
-        <button class="pill" onclick="setPill(this,'treemap-mode','trucks')">Trucks</button>
-        <button class="pill" onclick="setPill(this,'treemap-mode','2w3w')">2/3W</button>
-        <button class="pill" onclick="setPill(this,'treemap-mode','vans')">Vans</button>
       </div>
     </div>
   </div>
@@ -1065,17 +1346,26 @@
   <!-- KPI strip -->
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-bottom:0;" id="kpi-strip">
     <div class="kpi-sm" style="border-radius:0;border-top:none;border-right:none;">
-      <div class="k-label">EV Stock Share <span style="opacity:0.6;">(cars · 2024)</span></div>
+      <div class="k-label">
+        EV Stock Share <span style="opacity:0.6;">(cars · 2024)</span>
+        <span class="info-icon" data-tooltip="Percentage of all cars on the road that are electric. Higher = more electrified fleet.">i</span>
+      </div>
       <div class="k-val" id="kpi-stock-share">—</div>
       <div class="k-delta" id="kpi-stock-delta">Select a country</div>
     </div>
     <div class="kpi-sm" style="border-radius:0;border-top:none;border-right:none;">
-      <div class="k-label">EV Sales Share <span style="opacity:0.6;">(cars · 2024)</span></div>
+      <div class="k-label">
+        EV Sales Share <span style="opacity:0.6;">(cars · 2024)</span>
+        <span class="info-icon" data-tooltip="Percentage of new car sales that are electric. Indicates current market momentum.">i</span>
+      </div>
       <div class="k-val" id="kpi-sales-share">—</div>
       <div class="k-delta" id="kpi-sales-delta">Select a country</div>
     </div>
     <div class="kpi-sm" style="border-radius:0;border-top:none;">
-      <div class="k-label">Chargers / 1k EVs <span style="opacity:0.6;">(cars · 2024)</span></div>
+      <div class="k-label">
+        Chargers / 1k EVs <span style="opacity:0.6;">(cars · 2024)</span>
+        <span class="info-icon wide" data-tooltip="Public charging points per 1,000 EVs. Declines as adoption outpaces infrastructure — a sign of success, not failure.">i</span>
+      </div>
       <div class="k-val" id="kpi-charger-density">—</div>
       <div class="k-delta" id="kpi-charger-delta">Select a country</div>
     </div>
@@ -1093,6 +1383,81 @@
     <!-- ── TAB: POLICIES ── -->
     <div class="tab-panel active" id="tab-policies">
 
+      <!-- Policy Data Primer (Collapsible) -->
+      <div class="metrics-primer collapsible open" style="margin-bottom:24px;">
+        <div class="metrics-primer-header collapsible-header" onclick="toggleCollapsible(this)" style="cursor:pointer;">
+          <div style="display:flex;align-items:center;gap:10px;">
+          <div class="metrics-primer-icon">💡</div>
+          <div class="metrics-primer-title">Understanding Policy Data</div>
+          </div>
+          <div class="collapse-text" style="font-family:'Geist Mono',monospace;font-size:0.6rem;color:var(--text-4);letter-spacing:0.05em;transition:color 0.2s;">Hide ▲</div>
+        </div>
+ 
+        <div class="collapsible-content" style="display:block;">
+        <!-- Category section -->
+          <div style="margin-bottom:20px;margin-top:16px;">
+          <div style="font-family:'Geist Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);margin-bottom:10px;">Category <span style="opacity:0.6;text-transform:none;">(color-coded in chart)</span></div>
+          <div class="metrics-grid" style="grid-template-columns:repeat(4,1fr);">
+            <div class="metric-item" style="border-color:rgba(78,121,167,0.4);background:rgba(78,121,167,0.08);">
+              <div class="metric-name" style="color:#4E79A7;">Taxation</div>
+              <div class="metric-def">Fiscal incentives, tax credits, rebates, fee exemptions.</div>
+            </div>
+            <div class="metric-item" style="border-color:rgba(242,142,43,0.4);background:rgba(242,142,43,0.08);">
+              <div class="metric-name" style="color:#F28E2B;">LDV</div>
+              <div class="metric-def">Light-duty vehicles — cars, SUVs, passenger vehicles.</div>
+            </div>
+            <div class="metric-item" style="border-color:rgba(225,87,89,0.4);background:rgba(225,87,89,0.08);">
+              <div class="metric-name" style="color:#E15759;">M/HDV</div>
+              <div class="metric-def">Medium & heavy-duty — trucks and commercial fleets.</div>
+            </div>
+            <div class="metric-item" style="border-color:rgba(118,183,178,0.4);background:rgba(118,183,178,0.08);">
+              <div class="metric-name" style="color:#76B7B2;">Multiple</div>
+              <div class="metric-def">Policies spanning multiple vehicle categories.</div>
+            </div>
+          </div>
+          <div class="metrics-grid" style="grid-template-columns:repeat(4,1fr);margin-top:10px;">
+            <div class="metric-item" style="border-color:rgba(89,161,79,0.4);background:rgba(89,161,79,0.08);">
+              <div class="metric-name" style="color:#59A14F;">Manufacturing</div>
+              <div class="metric-def">Production, supply-side, and industrial policies.</div>
+            </div>
+            <div class="metric-item" style="border-color:rgba(237,201,72,0.4);background:rgba(237,201,72,0.08);">
+              <div class="metric-name" style="color:#EDC948;">EVSE</div>
+              <div class="metric-def">EV Supply Equipment — charging infrastructure.</div>
+            </div>
+            <div class="metric-item" style="border-color:rgba(176,122,161,0.4);background:rgba(176,122,161,0.08);">
+              <div class="metric-name" style="color:#B07AA1;">Bus</div>
+              <div class="metric-def">Bus-specific electrification policies.</div>
+            </div>
+            <div class="metric-item" style="border-color:rgba(255,157,167,0.4);background:rgba(255,157,167,0.08);">
+              <div class="metric-name" style="color:#FF9DA7;">2/3W</div>
+              <div class="metric-def">Two & three wheelers — scooters, motorcycles, rickshaws.</div>
+            </div>
+          </div>
+        </div>
+ 
+        <!-- Type and Level section -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;padding-top:16px;border-top:1px solid var(--border);">
+          <div>
+            <div style="font-family:'Geist Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);margin-bottom:10px;">Type</div>
+            <div class="metric-def" style="line-height:1.8;">
+              <strong style="color:var(--text-3);">Legislation</strong> — Enacted laws and regulations<br>
+              <strong style="color:var(--text-3);">Announced Target</strong> — Official government goals<br>
+              <strong style="color:var(--text-3);">Objective</strong> — Stated policy aims<br>
+              <strong style="color:var(--text-3);">Proposal</strong> — Under consideration
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'Geist Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);margin-bottom:10px;">Level</div>
+            <div class="metric-def" style="line-height:1.8;">
+              <strong style="color:var(--text-3);">Supranational</strong> — e.g., EU-level directives<br>
+              <strong style="color:var(--text-3);">Multi-national</strong> — Multiple countries<br>
+              <strong style="color:var(--text-3);">National</strong> — Country-wide policies<br>
+              <strong style="color:var(--text-3);">Subnational</strong> — State, province, or city
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
       <!-- Cluster narrative -->
       <!-- <div class="narrative-box" id="narrative-policies">
         <div class="narrative-label">Policy Context</div>
@@ -1104,13 +1469,17 @@
       <!-- Mode selector for policies -->
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
         <span style="font-family:'Geist Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);">Vehicle mode</span>
-        <div class="pill-group">
+      <!-- Mode selector with info icon -->
+      <div class="pill-group-wrapper">
+      <div class="pill-group">
           <button class="pill active" onclick="setPill(this,'policy-mode','cars')">Cars</button>
+          <button class="pill" onclick="setPill(this,'policy-mode','2w3w')">2/3W</button>
           <button class="pill" onclick="setPill(this,'policy-mode','buses')">Buses</button>
           <button class="pill" onclick="setPill(this,'policy-mode','trucks')">Trucks</button>
-          <button class="pill" onclick="setPill(this,'policy-mode','2w3w')">2/3W</button>
           <button class="pill" onclick="setPill(this,'policy-mode','vans')">Vans</button>
-        </div>
+      </div>
+        <span class="info-icon info-icon-below" data-tooltip="2/3W = two- and three-wheelers (scooters, motorcycles, e-rickshaws). Buses, Trucks, Vans = commercial vehicles.">i</span>
+      </div>
       </div>
 
       <!-- Policy chart -->
@@ -1134,7 +1503,6 @@
 
     <!-- ── TAB: INFRASTRUCTURE ── -->
     <div class="tab-panel" id="tab-infra">
-
     <div id="infra-chart-container" style="width:100%;min-height:340px;"></div>
 
       <div class="callout" id="callout-infra">
@@ -1219,6 +1587,23 @@
 
       <!-- ── SUB-TAB: POLICIES ── -->
       <div class="sub-tab-panel active" id="sub-tab-policies">
+
+        <!-- Mode selector for policies -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <span style="font-family:'Geist Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);">Vehicle mode</span>
+        <!-- Mode selector with info icon -->
+        <div class="pill-group-wrapper">
+        <div class="pill-group">
+            <button class="pill active" onclick="setPill(this,'compare-policy-mode','cars')">Cars</button>
+            <button class="pill" onclick="setPill(this,'compare-policy-mode','2w3w')">2/3W</button>
+            <button class="pill" onclick="setPill(this,'compare-policy-mode','buses')">Buses</button>
+            <button class="pill" onclick="setPill(this,'compare-policy-mode','trucks')">Trucks</button>
+            <button class="pill" onclick="setPill(this,'compare-policy-mode','vans')">Vans</button>
+        </div>
+          <span class="info-icon info-icon-below" data-tooltip="2/3W = two- and three-wheelers (scooters, motorcycles, e-rickshaws). Buses, Trucks, Vans = commercial vehicles.">i</span>
+        </div>
+        </div>
+
         <div id="compare-policy-chart-container" style="width:100%;min-height:380px;"></div>
       </div>
 
@@ -1235,7 +1620,7 @@
   <footer>
     <div>
       <div class="footer-name">Alexandra Bauche, Anna Mowat, Shengmin Xiao</div>
-      <div class="footer-sub">IEA Global EV Data Explorer · 63+ Countries · 2010–2024 · UC Berkeley MIDS W209</div>
+      <div class="footer-sub">IEA Global EV Data Explorer · 54 Countries · 2010–2024 · UC Berkeley MIDS W209</div>
     </div>
   </footer>
 
@@ -1247,6 +1632,25 @@
   let selectedCountry = null;
   let compareCountries = [];
   let selectedPolicyMode = 'Cars'; // tracks active vehicle mode in the Policies tab
+  let selectedComparePolicyMode = 'Cars'; // tracks active vehicle mode in Compare Countries > Policies
+
+  // ── Collapsible toggle ───────────────────────────────────────────────────
+  function toggleCollapsible(header) {
+    const primer = header.closest('.collapsible');
+    const content = primer.querySelector('.collapsible-content');
+    const toggleText = primer.querySelector('.collapse-text');
+    const isOpen = primer.classList.contains('open');
+
+    if (isOpen) {
+      primer.classList.remove('open');
+      content.style.display = 'none';
+      toggleText.textContent = 'Show ▼';
+    } else {
+      primer.classList.add('open');
+      content.style.display = 'block';
+      toggleText.textContent = 'Hide ▲';
+    }
+  }
 
   // ── Country selection ────────────────────────────────────────────────────
   function selectCountry(country) {
@@ -1347,12 +1751,16 @@
     el.classList.add('active');
     if (group === 'mode'   && window.redefineRegional) window.redefineRegional("selectedMode",   modeMap[value]   || value);
     if (group === 'metric' && window.redefineRegional) window.redefineRegional("selectedMetric", metricMap[value] || value);
+    if (group === 'treemap-mode') {
+      if (window.redefineTreemap) window.redefineTreemap("selectedMode", modeMap[value] || value);
+    }
     if (group === 'policy-mode') {
       selectedPolicyMode = modeMap[value] || value;
       if (window.redefinePolicy) window.redefinePolicy(selectedCountry, selectedPolicyMode);
     }
-    if (group === 'treemap-mode') {
-      if (window.redefineTreemap) window.redefineTreemap("selectedMode", modeMap[value] || value);
+    if (group === 'compare-policy-mode') {
+      selectedComparePolicyMode = modeMap[value] || value;
+      if (window.redefineComparePolicyMode) window.redefineComparePolicyMode(selectedComparePolicyMode);
     }
   }
 
@@ -1560,6 +1968,10 @@
     mainInfra.redefine("compareCountry2", c2);
     try { mainPolicy.redefine("compareCountry1", c1); } catch(e) {}
     try { mainPolicy.redefine("compareCountry2", c2); } catch(e) {}
+  };
+  // 'compareMode' should match the variable set in the Observable notebook
+  window.redefineComparePolicyMode = (mode) => {
+    try { mainPolicy.redefine("compareMode", mode); } catch(e) {}
   };
 
   window.redefineTreemap = (key, value) => {
