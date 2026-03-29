@@ -15,7 +15,7 @@
       --lime:         #E6FF94;
 
       /* Derived surfaces */
-      --bg:           #005456;   /* slightly darker than deep teal */
+      --bg:           #006a6c;   /* Lighter than main teal color */
       --bg-1:         #006769;   /* main teal */
       --bg-2:         #007a7c;   /* cards / elevated */
       --bg-3:         #008d8f;   /* hover states */
@@ -406,15 +406,16 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 16px;
-      height: 16px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid var(--border);
+      width: 18px;
+      height: 18px;
+      background: rgba(230,255,148,0.15);
+      border: 1px solid rgba(230,255,148,0.35);
       border-radius: 50%;
-      font-family: 'Geist Mono', monospace;
-      font-size: 0.55rem;
+      font-family: Georgia, serif;
+      /* font-style: italic; */
+      font-size: 0.7rem;
       font-weight: 600;
-      color: var(--text-4);
+      color: var(--accent);
       cursor: default;
       position: relative;
       transition: all 0.18s;
@@ -423,8 +424,8 @@
     }
 
     .info-icon:hover {
-      background: var(--accent-glow);
-      border-color: var(--accent-border);
+      background: rgba(230,255,148,0.25);
+      border-color: var(--accent);
       color: var(--accent);
     }
 
@@ -833,7 +834,7 @@
 
     .k-delta {
       font-family: 'Geist Mono', monospace;
-      font-size: 0.57rem;
+      font-size: 0.65rem;
       color: var(--accent);
       margin-top: 5px;
     }
@@ -1079,7 +1080,8 @@
     .policy-tag {
       display: inline-block;
       font-family: 'Geist Mono', monospace;
-      font-size: 0.52rem;
+      font-size: 0.58rem;
+      font-weight: 300;
       letter-spacing: 0.07em;
       text-transform: uppercase;
       padding: 2px 7px;
@@ -1087,11 +1089,6 @@
       margin-right: 5px;
       margin-top: 5px;
     }
-
-    .policy-tag.demand   { background: rgba(230,255,148,0.12); color: var(--accent); border: 1px solid var(--accent-border); }
-    .policy-tag.supply   { background: rgba(64,165,120,0.15);  color: var(--teal-mid); border: 1px solid rgba(64,165,120,0.3); }
-    .policy-tag.target   { background: rgba(157,222,139,0.1);  color: var(--green-light); border: 1px solid rgba(157,222,139,0.3); }
-
 
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
@@ -1239,7 +1236,7 @@
   <div class="card" style="margin-bottom:16px;">
     <div class="card-header">
       <div class="card-title">EV Adoption by Region</div>
-      <div style="display:flex;gap:8px;align-items:center;">
+      <div style="display:flex;gap: 60px;align-items:center;">
         <!-- Mode selector with info icon -->
         <div class="pill-group-wrapper">
         <div class="pill-group">
@@ -1263,20 +1260,15 @@
     <div class="card-body" style="padding: 16px 26px 16px;">
       <div id="regional-chart-container"></div>
     </div>
-    <div class="card-footer">
-      <div class="footer-note">
-        Select a <strong style="color:var(--accent)">vehicle mode</strong> and <strong style="color:var(--accent)">metric</strong> above to update the chart
-      </div>
-    </div>
   </div>
 
 <!-- 1B: Country-level treemap -->
-<div class="card">
+<div class="card" style="margin-bottom:16px;">
   <div class="card-header">
     <div class="card-title">
       Country-Level Distribution
     </div>
-    <div style="display:flex;align-items:center;gap:12px;">
+    <div style="display:flex;align-items:center;gap:70px;">
       <!-- Mode selector with info icon -->
       <div class="pill-group-wrapper">
       <div class="pill-group">
@@ -1300,13 +1292,8 @@
       </div>
     </div>
   </div>
-  <div class="card-body">
-    <div id="treemap-container" style="width:100%; min-height:520px;"></div>
-  </div>
-  <div class="card-footer">
-    <div class="footer-note">
-            Select a <strong style="color:var(--accent)">year</strong> and <strong style="color:var(--accent)">vehicle mode</strong> above to update the chart | Treemap encoding: Size = EV Sales Share · Color = Total Vehicle Sold
-    </div>
+  <div class="card-body" style="padding: 16px 26px 16px;">
+    <div id="treemap-container"></div>
   </div>
 </div>
 
@@ -1347,7 +1334,7 @@
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-bottom:0;" id="kpi-strip">
     <div class="kpi-sm" style="border-radius:0;border-top:none;border-right:none;">
       <div class="k-label">
-        EV Stock Share <span style="opacity:0.6;">(cars · 2024)</span>
+        EV Stock Share - Cars, 2024
         <span class="info-icon" data-tooltip="Percentage of all cars on the road that are electric. Higher = more electrified fleet.">i</span>
       </div>
       <div class="k-val" id="kpi-stock-share">—</div>
@@ -1355,7 +1342,7 @@
     </div>
     <div class="kpi-sm" style="border-radius:0;border-top:none;border-right:none;">
       <div class="k-label">
-        EV Sales Share <span style="opacity:0.6;">(cars · 2024)</span>
+        EV Sales Share - Cars, 2024
         <span class="info-icon" data-tooltip="Percentage of new car sales that are electric. Indicates current market momentum.">i</span>
       </div>
       <div class="k-val" id="kpi-sales-share">—</div>
@@ -1363,7 +1350,7 @@
     </div>
     <div class="kpi-sm" style="border-radius:0;border-top:none;">
       <div class="k-label">
-        Chargers / 1k EVs <span style="opacity:0.6;">(cars · 2024)</span>
+        Chargers per 1k EVs - 2024
         <span class="info-icon wide" data-tooltip="Public charging points per 1,000 EVs. Declines as adoption outpaces infrastructure — a sign of success, not failure.">i</span>
       </div>
       <div class="k-val" id="kpi-charger-density">—</div>
@@ -1383,89 +1370,6 @@
     <!-- ── TAB: POLICIES ── -->
     <div class="tab-panel active" id="tab-policies">
 
-      <!-- Policy Data Primer (Collapsible) -->
-      <div class="metrics-primer collapsible open" style="margin-bottom:24px;">
-        <div class="metrics-primer-header collapsible-header" onclick="toggleCollapsible(this)" style="cursor:pointer;">
-          <div style="display:flex;align-items:center;gap:10px;">
-          <div class="metrics-primer-icon">💡</div>
-          <div class="metrics-primer-title">Understanding Policy Data</div>
-          </div>
-          <div class="collapse-text" style="font-family:'Geist Mono',monospace;font-size:0.6rem;color:var(--text-4);letter-spacing:0.05em;transition:color 0.2s;">Hide ▲</div>
-        </div>
- 
-        <div class="collapsible-content" style="display:block;">
-        <!-- Category section -->
-          <div style="margin-bottom:20px;margin-top:16px;">
-          <div style="font-family:'Geist Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);margin-bottom:10px;">Category <span style="opacity:0.6;text-transform:none;">(color-coded in chart)</span></div>
-          <div class="metrics-grid" style="grid-template-columns:repeat(4,1fr);">
-            <div class="metric-item" style="border-color:rgba(78,121,167,0.4);background:rgba(78,121,167,0.08);">
-              <div class="metric-name" style="color:#4E79A7;">Taxation</div>
-              <div class="metric-def">Fiscal incentives, tax credits, rebates, fee exemptions.</div>
-            </div>
-            <div class="metric-item" style="border-color:rgba(242,142,43,0.4);background:rgba(242,142,43,0.08);">
-              <div class="metric-name" style="color:#F28E2B;">LDV</div>
-              <div class="metric-def">Light-duty vehicles — cars, SUVs, passenger vehicles.</div>
-            </div>
-            <div class="metric-item" style="border-color:rgba(225,87,89,0.4);background:rgba(225,87,89,0.08);">
-              <div class="metric-name" style="color:#E15759;">M/HDV</div>
-              <div class="metric-def">Medium & heavy-duty — trucks and commercial fleets.</div>
-            </div>
-            <div class="metric-item" style="border-color:rgba(118,183,178,0.4);background:rgba(118,183,178,0.08);">
-              <div class="metric-name" style="color:#76B7B2;">Multiple</div>
-              <div class="metric-def">Policies spanning multiple vehicle categories.</div>
-            </div>
-          </div>
-          <div class="metrics-grid" style="grid-template-columns:repeat(4,1fr);margin-top:10px;">
-            <div class="metric-item" style="border-color:rgba(89,161,79,0.4);background:rgba(89,161,79,0.08);">
-              <div class="metric-name" style="color:#59A14F;">Manufacturing</div>
-              <div class="metric-def">Production, supply-side, and industrial policies.</div>
-            </div>
-            <div class="metric-item" style="border-color:rgba(237,201,72,0.4);background:rgba(237,201,72,0.08);">
-              <div class="metric-name" style="color:#EDC948;">EVSE</div>
-              <div class="metric-def">EV Supply Equipment — charging infrastructure.</div>
-            </div>
-            <div class="metric-item" style="border-color:rgba(176,122,161,0.4);background:rgba(176,122,161,0.08);">
-              <div class="metric-name" style="color:#B07AA1;">Bus</div>
-              <div class="metric-def">Bus-specific electrification policies.</div>
-            </div>
-            <div class="metric-item" style="border-color:rgba(255,157,167,0.4);background:rgba(255,157,167,0.08);">
-              <div class="metric-name" style="color:#FF9DA7;">2/3W</div>
-              <div class="metric-def">Two & three wheelers — scooters, motorcycles, rickshaws.</div>
-            </div>
-          </div>
-        </div>
- 
-        <!-- Type and Level section -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;padding-top:16px;border-top:1px solid var(--border);">
-          <div>
-            <div style="font-family:'Geist Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);margin-bottom:10px;">Type</div>
-            <div class="metric-def" style="line-height:1.8;">
-              <strong style="color:var(--text-3);">Legislation</strong> — Enacted laws and regulations<br>
-              <strong style="color:var(--text-3);">Announced Target</strong> — Official government goals<br>
-              <strong style="color:var(--text-3);">Objective</strong> — Stated policy aims<br>
-              <strong style="color:var(--text-3);">Proposal</strong> — Under consideration
-            </div>
-          </div>
-          <div>
-            <div style="font-family:'Geist Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);margin-bottom:10px;">Level</div>
-            <div class="metric-def" style="line-height:1.8;">
-              <strong style="color:var(--text-3);">Supranational</strong> — e.g., EU-level directives<br>
-              <strong style="color:var(--text-3);">Multi-national</strong> — Multiple countries<br>
-              <strong style="color:var(--text-3);">National</strong> — Country-wide policies<br>
-              <strong style="color:var(--text-3);">Subnational</strong> — State, province, or city
-            </div>
-          </div>
-        </div>
-        </div>
-      </div>
-      <!-- Cluster narrative -->
-      <!-- <div class="narrative-box" id="narrative-policies">
-        <div class="narrative-label">Policy Context</div>
-        <div class="narrative-text" id="narrative-policies-text">
-          Select a country above to see its policy narrative.
-        </div>
-      </div> -->
-
       <!-- Mode selector for policies -->
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
         <span style="font-family:'Geist Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);">Vehicle mode</span>
@@ -1484,6 +1388,60 @@
 
       <!-- Policy chart -->
       <div id="policy-chart-container" style="width:100%;min-height:300px;"></div>
+
+      <!-- Policy Data Primer (Collapsible) -->
+      <div class="metrics-primer collapsible open" style="margin-bottom:24px;">
+        <div class="metrics-primer-header collapsible-header" onclick="toggleCollapsible(this)" style="cursor:pointer;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="metrics-primer-icon">💡</div>
+            <div class="metrics-primer-title">Understanding Policy Data</div>
+          </div>
+          <div class="collapse-text" style="font-family:'Geist Mono',monospace;font-size:0.6rem;color:var(--text-4);letter-spacing:0.05em;transition:color 0.2s;">Hide ▲</div>
+        </div>
+ 
+        <div class="collapsible-content" style="display:block;">
+          <div style="display:grid;grid-template-columns:1.85fr 1.4fr 1.25fr;gap:16px;margin-top:16px;">
+            
+            <!-- Category card -->
+            <div style="background:rgba(100,149,237,0.12);border:1px solid rgba(100,149,237,0.4);border-radius:10px;padding:16px 20px;">
+              <div style="font-family:'Geist Mono',monospace;font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ADD8E6;margin-bottom:12px;">Category</div>
+              <div class="metric-def" style="line-height:1.9;">
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">Taxation</strong> — Fiscal incentives, tax credits, rebates, fee exemptions.<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">LDV</strong> — Light-duty vehicles — cars, SUVs, passenger vehicles.<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">M/HDV</strong> — Medium & heavy-duty — trucks and commercial fleets.<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">Multiple</strong> — Policy spanning multiple vehicle categories.<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">Manufacturing</strong> — Production, supply-side, and industrial policy.<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">EVSE</strong> — EV Supply Equipment — charging infrastructure policy.<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">Bus</strong> — Bus-specific electrification policy.<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">2/3W</strong> — Two & three wheelers — scooters, motorcycles, rickshaws.
+              </div>
+            </div>
+
+            <!-- Type card -->
+            <div style="background:rgba(237,201,72,0.12);border:1px solid rgba(237,201,72,0.4);border-radius:10px;padding:16px 20px;">
+              <div style="font-family:'Geist Mono',monospace;font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#EDC948;margin-bottom:12px;">Type</div>
+              <div class="metric-def" style="line-height:1.9;">
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">Legislation</strong> — Enacted laws and regulations<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">Announced Target</strong> — Official government goals<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">Objective</strong> — Stated policy aims<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">Proposal</strong> — Under consideration
+              </div>
+            </div>
+
+            <!-- Level card -->
+            <div style="background: rgba(255,253,208,0.12);border:1px solid rgba(255,253,208,0.35);border-radius:10px;padding:16px 20px;">
+              <div style="font-family:'Geist Mono',monospace;;font-size:0.65rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#FFFDD0;margin-bottom:12px;">Level</div>
+              <div class="metric-def" style="line-height:1.9;">
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">Supranational</strong> — e.g., EU-level directives<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">Multi-national</strong> — Multiple countries<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">National</strong> — Country-wide policies<br>
+                <span style="color:var(--text-3);">●</span> <strong style="color:var(--text-3);">Subnational</strong> — State, province, or city
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
 
       <!-- Policy list -->
       <div style="margin-top:20px;">
@@ -1556,7 +1514,9 @@
 
       <!-- Country selectors -->
       <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap;">
-        <span style="font-family:'Geist Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);white-space:nowrap;">Compare against</span>
+        <span id="compare-label" style="font-family:'Geist Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);white-space:nowrap;">
+          Select your primary country above ↑
+        </span>
         <select id="compare-select-1" onchange="updateCompare()" style="
           font-family:'Geist Mono',monospace;font-size:0.75rem;
           background:rgba(0,0,0,0.25);color:var(--text-1);
@@ -1657,6 +1617,7 @@
     if (!country) return; 
     selectedCountry = country;
     updateDashboard(country);
+    updateCompareLabel();
     if (window.redefineInfra) window.redefineInfra(country);
     if (window.redefinePolicy) window.redefinePolicy(country, selectedPolicyMode);
     if (window.redefineCompare) {
@@ -1772,6 +1733,25 @@
     if (window.redefineCompare) window.redefineCompare(c1 || null, c2 || null);
   }
 
+  function updateCompareLabel() {
+    const label = document.getElementById('compare-label');
+    if (!label) return;
+    if (selectedCountry) {
+      label.innerHTML =
+        `COMPARE <span style="
+          color: var(--teal-deep);
+          background: var(--accent);
+          font-weight: 600;
+          padding: 2px 9px;
+          border-radius: 5px;
+          box-shadow: 0 1px 6px rgba(230,255,148,0.3);
+          letter-spacing: 0.04em;
+        ">${selectedCountry.toUpperCase()}</span> AGAINST`;
+    } else {
+      label.innerHTML = `Select your primary country above`;
+    }
+  }
+
   // ── Year slider ──────────────────────────────────────
   function setTreemapYear(value) {
     document.getElementById("treemap-year-label").textContent = value;
@@ -1791,7 +1771,7 @@
   import defineRegional from "https://api.observablehq.com/d/c4630f575603dac8.js?v=4";
   import defineInfra from "https://api.observablehq.com/d/e376a97e453dc905.js?v=4";
   import policyChart from "https://api.observablehq.com/d/acc3be41c3b5ec8a.js?v=4";
-  import defineTreemap from "https://api.observablehq.com/d/7cb860f377bba4ea.js?v=4";
+  import defineTreemap from "https://api.observablehq.com/d/41246558171e6644.js?v=4";
 
   const runtime = new Runtime();
   const container = document.getElementById("regional-chart-container");
@@ -1852,14 +1832,9 @@
     };
   });
 
-  const categoryColors = {
-    "LDV":           { bg: "rgba(230,255,148,0.12)", color: "var(--accent)",       border: "var(--accent-border)" },
-    "M/HDV":         { bg: "rgba(64,165,120,0.15)",  color: "var(--teal-mid)",     border: "rgba(64,165,120,0.3)" },
-    "EVSE":          { bg: "rgba(89,200,255,0.12)",  color: "#59c8ff",             border: "rgba(89,200,255,0.3)" },
-    "Taxation":      { bg: "rgba(245,166,35,0.12)",  color: "#f5a623",             border: "rgba(245,166,35,0.3)" },
-    "Manufacturing": { bg: "rgba(157,222,139,0.1)",  color: "var(--green-light)",  border: "rgba(157,222,139,0.3)" },
-    "Multiple":      { bg: "rgba(255,255,255,0.08)", color: "var(--text-2)",       border: "var(--border-2)" },
-  };
+  const catStyle   = { bg: "rgba(100,149,237,0.12)", color: "#ADD8E6", border: "rgba(100,149,237,0.4)" };
+  const typeStyle  = { bg: "rgba(237,201,72,0.12)", color: "#EDC948", border: "rgba(237,201,72,0.35)" };
+  const levelStyle = { bg: "rgba(255,253,208,0.12)", color: "#FFFDD0", border: "rgba(255,253,208,0.35)" };
 
   function renderPolicyList(policies) {
     const list = document.getElementById("policy-list");
@@ -1873,13 +1848,13 @@
       </div>`;
       return;
     }
+
     const sorted = [...policies].sort((a, b) => b.year - a.year);
     list.innerHTML = sorted.map(d => {
-      const col = categoryColors[d.category] || categoryColors["Multiple"];
-      const tagStyle = `background:${col.bg};color:${col.color};border:1px solid ${col.border};`;
-      const levelTag = d.level ? `<span class="policy-tag" style="${tagStyle}">${d.level}</span>` : "";
-      const typeTag  = d.type  ? `<span class="policy-tag" style="${tagStyle}">${d.type}</span>`  : "";
-      const catTag   = d.category ? `<span class="policy-tag" style="${tagStyle}">${d.category}</span>` : "";
+      const catTag   = d.category ? `<span class="policy-tag" style="background:${catStyle.bg};color:${catStyle.color};border:1px solid ${catStyle.border};">${d.category}</span>` : "";
+      const typeTag  = d.type     ? `<span class="policy-tag" style="background:${typeStyle.bg};color:${typeStyle.color};border:1px solid ${typeStyle.border};">${d.type}</span>` : "";
+      const levelTag = d.level    ? `<span class="policy-tag" style="background:${levelStyle.bg};color:${levelStyle.color};border:1px solid ${levelStyle.border};">${d.level}</span>` : "";
+
       return `<div class="policy-item">
         <div class="policy-year">${d.year}</div>
         <div class="policy-body">
@@ -1913,7 +1888,6 @@
   mainRegional.redefine("width", container.clientWidth);
   mainInfra.redefine("width", infraContainer.clientWidth);
   mainTreemap.redefine("width", treemapContainer.clientWidth);
-  // policy chart width pushed lazily on tab switch (container has 0px width before first paint)
 
   // Keep width responsive on resize
   const ro = new ResizeObserver(entries => {
