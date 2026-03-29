@@ -1491,14 +1491,8 @@
         </div>
       </div>
 
-      <div class="viz-ph" style="height:340px;" id="modes-chart-container">
-        <div class="ph-icon">🚗</div>
-        <div class="ph-text">
-          EV stock by vehicle mode · Stacked area chart · 2010–2024<br/>
-          <span style="font-size:0.57rem;opacity:0.7">Cars · 2/3 Wheelers · Buses · Trucks · Vans</span>
-        </div>
-        <div class="ph-badge">→ Observable cell: mode-mix-chart</div>
-      </div>
+      <div id="modes-chart-container" style="width:100%; min-height:340px;"></div>
+
 
       <div class="callout" id="callout-modes">
         <div class="callout-icon">🌏</div>
@@ -1617,7 +1611,7 @@
     if (!country) return; 
     selectedCountry = country;
     updateDashboard(country);
-    updateCompareLabel();
+    if (window.redefineModes) window.redefineModes("selectedCountry", country);
     if (window.redefineInfra) window.redefineInfra(country);
     if (window.redefinePolicy) window.redefinePolicy(country, selectedPolicyMode);
     if (window.redefineCompare) {
@@ -1723,6 +1717,15 @@
       selectedComparePolicyMode = modeMap[value] || value;
       if (window.redefineComparePolicyMode) window.redefineComparePolicyMode(selectedComparePolicyMode);
     }
+    if (group === 'stack-view') {
+      const chartTypeMap = {
+        stacked: 'Stacked',
+        normalized: 'Normalized'
+      };
+      if (window.redefineModes) {
+        window.redefineModes("chartType", chartTypeMap[value] || value);
+      }
+    }
   }
 
   // ── Head-to-head compare dropdowns ──────────────────────────────────────
@@ -1771,7 +1774,8 @@
   import defineRegional from "https://api.observablehq.com/d/c4630f575603dac8.js?v=4";
   import defineInfra from "https://api.observablehq.com/d/e376a97e453dc905.js?v=4";
   import policyChart from "https://api.observablehq.com/d/acc3be41c3b5ec8a.js?v=4";
-  import defineTreemap from "https://api.observablehq.com/d/41246558171e6644.js?v=4";
+  import defineTreemap from "https://api.observablehq.com/d/7cb860f377bba4ea.js?v=4";
+  import defineModes from "https://api.observablehq.com/d/6ec586de6314736c.js?v=4";
 
   const runtime = new Runtime();
   const container = document.getElementById("regional-chart-container");
@@ -1780,6 +1784,13 @@
   const policyContainer = document.getElementById("policy-chart-container");
   const comparePolicyContainer = document.getElementById("compare-policy-chart-container");
   const treemapContainer = document.getElementById("treemap-container");
+  const modesContainer = document.getElementById("modes-chart-container");
+
+  const mainModes = new Runtime().module(defineModes, name => {
+    if (name === "modeMixChart") {
+      return new Inspector(modesContainer);
+    }
+  });
 
   const mainRegional = runtime.module(defineRegional, name => {
     if (name === "regionalTrendChart") return new Inspector(container);
@@ -1920,6 +1931,15 @@
   });
   roTreemap.observe(treemapContainer);
 
+  const roModes = new ResizeObserver(entries => {
+    for (const entry of entries) {
+      if (entry.contentRect.width > 0) {
+        mainModes.redefine("width", entry.contentRect.width);
+      }
+    }
+  });
+  roModes.observe(modesContainer);
+
 
   // Wire pills to Observable
   window.redefineRegional = (key, value) => {
@@ -1952,6 +1972,14 @@
     try {
       mainTreemap.redefine(key, value);
     } catch (e) {}
+  };
+
+  window.redefineModes = (key, value) => {
+    try {
+      mainModes.redefine(key, value);
+    } catch (err) {
+      console.warn("Mode mix redefine failed:", key, value, err);
+    }
   };
 
 </script>
