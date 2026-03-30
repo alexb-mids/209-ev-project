@@ -1611,6 +1611,7 @@
     if (!country) return; 
     selectedCountry = country;
     updateDashboard(country);
+    updateCompareLabel();
     if (window.redefineModes) window.redefineModes("selectedCountry", country);
     if (window.redefineInfra) window.redefineInfra(country);
     if (window.redefinePolicy) window.redefinePolicy(country, selectedPolicyMode);
