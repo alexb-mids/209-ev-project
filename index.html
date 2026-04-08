@@ -1390,16 +1390,16 @@
       <div id="policy-chart-container" style="width:100%;min-height:300px;"></div>
 
       <!-- Policy Data Primer (Collapsible) -->
-      <div class="metrics-primer collapsible open" style="margin-bottom:24px;">
+      <div class="metrics-primer collapsible" style="margin-bottom:24px;">
         <div class="metrics-primer-header collapsible-header" onclick="toggleCollapsible(this)" style="cursor:pointer;">
           <div style="display:flex;align-items:center;gap:10px;">
             <div class="metrics-primer-icon">💡</div>
             <div class="metrics-primer-title">Understanding Policy Data</div>
           </div>
-          <div class="collapse-text" style="font-family:'Geist Mono',monospace;font-size:0.6rem;color:var(--text-4);letter-spacing:0.05em;transition:color 0.2s;">Hide ▲</div>
+          <div class="collapse-text" style="font-family:'Geist Mono',monospace;font-size:0.6rem;color:var(--text-4);letter-spacing:0.05em;transition:color 0.2s;">Show ▼</div>
         </div>
  
-        <div class="collapsible-content" style="display:block;">
+        <div class="collapsible-content" style="display:none;">
           <div style="display:grid;grid-template-columns:1.85fr 1.4fr 1.25fr;gap:16px;margin-top:16px;">
             
             <!-- Category card -->
@@ -1861,17 +1861,32 @@
       return;
     }
 
-    const sorted = [...policies].sort((a, b) => b.year - a.year);
+    // Deduplicate: group by measure+year+type+level, merging categories
+    const groupMap = new Map();
+    for (const d of policies) {
+      const key = `${d.measure}||${d.year}||${d.type}||${d.level}`;
+      if (groupMap.has(key)) {
+        const existing = groupMap.get(key);
+        if (d.category && !existing.categories.includes(d.category)) {
+          existing.categories.push(d.category);
+        }
+      } else {
+        groupMap.set(key, { ...d, categories: d.category ? [d.category] : [] });
+      }
+    }
+
+    const deduped = [...groupMap.values()];
+    const sorted = deduped.sort((a, b) => b.year - a.year);
     list.innerHTML = sorted.map(d => {
-      const catTag   = d.category ? `<span class="policy-tag" style="background:${catStyle.bg};color:${catStyle.color};border:1px solid ${catStyle.border};">${d.category}</span>` : "";
-      const typeTag  = d.type     ? `<span class="policy-tag" style="background:${typeStyle.bg};color:${typeStyle.color};border:1px solid ${typeStyle.border};">${d.type}</span>` : "";
-      const levelTag = d.level    ? `<span class="policy-tag" style="background:${levelStyle.bg};color:${levelStyle.color};border:1px solid ${levelStyle.border};">${d.level}</span>` : "";
+      const catTags  = d.categories.map(cat => `<span class="policy-tag" style="background:${catStyle.bg};color:${catStyle.color};border:1px solid ${catStyle.border};">${cat}</span>`).join("");
+      const typeTag  = d.type  ? `<span class="policy-tag" style="background:${typeStyle.bg};color:${typeStyle.color};border:1px solid ${typeStyle.border};">${d.type}</span>` : "";
+      const levelTag = d.level ? `<span class="policy-tag" style="background:${levelStyle.bg};color:${levelStyle.color};border:1px solid ${levelStyle.border};">${d.level}</span>` : "";
 
       return `<div class="policy-item">
         <div class="policy-year">${d.year}</div>
         <div class="policy-body">
           <div class="policy-title">${d.measure || "—"}</div>
-          <div style="margin-top:6px;">${catTag}${typeTag}${levelTag}</div>
+          <div style="margin-top:6px;">${catTags}${typeTag}${levelTag}</div>
         </div>
       </div>`;
     }).join("");
