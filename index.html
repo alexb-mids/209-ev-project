@@ -1861,17 +1861,32 @@
       return;
     }
 
-    const sorted = [...policies].sort((a, b) => b.year - a.year);
+    // Deduplicate: group by measure+year+type+level, merging categories
+    const groupMap = new Map();
+    for (const d of policies) {
+      const key = `${d.measure}||${d.year}||${d.type}||${d.level}`;
+      if (groupMap.has(key)) {
+        const existing = groupMap.get(key);
+        if (d.category && !existing.categories.includes(d.category)) {
+          existing.categories.push(d.category);
+        }
+      } else {
+        groupMap.set(key, { ...d, categories: d.category ? [d.category] : [] });
+      }
+    }
+
+    const deduped = [...groupMap.values()];
+    const sorted = deduped.sort((a, b) => b.year - a.year);
     list.innerHTML = sorted.map(d => {
-      const catTag   = d.category ? `<span class="policy-tag" style="background:${catStyle.bg};color:${catStyle.color};border:1px solid ${catStyle.border};">${d.category}</span>` : "";
-      const typeTag  = d.type     ? `<span class="policy-tag" style="background:${typeStyle.bg};color:${typeStyle.color};border:1px solid ${typeStyle.border};">${d.type}</span>` : "";
-      const levelTag = d.level    ? `<span class="policy-tag" style="background:${levelStyle.bg};color:${levelStyle.color};border:1px solid ${levelStyle.border};">${d.level}</span>` : "";
+      const catTags  = d.categories.map(cat => `<span class="policy-tag" style="background:${catStyle.bg};color:${catStyle.color};border:1px solid ${catStyle.border};">${cat}</span>`).join("");
+      const typeTag  = d.type  ? `<span class="policy-tag" style="background:${typeStyle.bg};color:${typeStyle.color};border:1px solid ${typeStyle.border};">${d.type}</span>` : "";
+      const levelTag = d.level ? `<span class="policy-tag" style="background:${levelStyle.bg};color:${levelStyle.color};border:1px solid ${levelStyle.border};">${d.level}</span>` : "";
 
       return `<div class="policy-item">
         <div class="policy-year">${d.year}</div>
         <div class="policy-body">
           <div class="policy-title">${d.measure || "—"}</div>
-          <div style="margin-top:6px;">${catTag}${typeTag}${levelTag}</div>
+          <div style="margin-top:6px;">${catTags}${typeTag}${levelTag}</div>
         </div>
       </div>`;
     }).join("");
