@@ -1509,7 +1509,7 @@
       <!-- Country selectors -->
       <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap;">
         <span id="compare-label" style="font-family:'Geist Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4);white-space:nowrap;">
-          Select your primary country above ↑
+          SELECT COUNTRIES TO COMPARE
         </span>
         <select id="compare-select-1" onchange="updateCompare()" style="
           font-family:'Geist Mono',monospace;font-size:0.75rem;
@@ -1741,18 +1741,9 @@
     const label = document.getElementById('compare-label');
     if (!label) return;
     if (selectedCountry) {
-      label.innerHTML =
-        `COMPARE <span style="
-          color: var(--teal-deep);
-          background: var(--accent);
-          font-weight: 600;
-          padding: 2px 9px;
-          border-radius: 5px;
-          box-shadow: 0 1px 6px rgba(230,255,148,0.3);
-          letter-spacing: 0.04em;
-        ">${selectedCountry.toUpperCase()}</span> AGAINST`;
+      label.innerHTML = `SELECT COUNTRIES TO COMPARE`;
     } else {
-      label.innerHTML = `Select your primary country above`;
+      label.innerHTML = `SELECT COUNTRIES TO COMPARE`;
     }
   }
 
