@@ -116,7 +116,7 @@
 
     .nav-tag {
       font-family: 'Geist Mono', monospace;
-      font-size: 0.6rem;
+      font-size: 0.7rem;
       letter-spacing: 0.08em;
       color: var(--accent);
       border: 1px solid var(--accent-border);
@@ -336,8 +336,9 @@
     }
 
     .metric-item.primary {
-      border-color: var(--accent-border);
-      background: var(--accent-glow2);
+      /* Same as other cards — badge handles the emphasis */
+      /* border-color: var(--accent-border);
+      background: var(--accent-glow2); */
     }
 
     .metric-name {
@@ -1171,14 +1172,14 @@
       <div class="logo-mark">⚡</div>
       W209 Data Visualization · UC Berkeley MIDS
     </div>
-    <div class="nav-tag">IEA Global EV Data Explorer Dataset · 2010–2024</div>
+    <div class="nav-tag">IEA Global EV Data Explorer · IEA Global EV Policy Explorer · 2010–2024</div>
   </nav>
 
   <header class="hero">
     <div>
       <h1>The Global <em>EV Transition:</em><br/>What Drives Adoption?</h1>
       <p class="hero-body">
-        Infrastructure investment, policy design, and vehicle mix all shape EV adoption — but not equally. Explore what the data reveals across 54 countries and 14 years to guide effective electrification policy.
+        Infrastructure investment, policy design, and vehicle mix all shape EV adoption — but not equally. Designed for policymakers and analysts, this dashboard reveals what the data shows across 54 countries and 14 years to inform electrification strategy.
       </p>
     </div>
     <div class="hero-aside">
@@ -1354,11 +1355,11 @@
     </div>
     <div class="kpi-sm" style="border-radius:0;border-top:none;">
       <div class="k-label">
-        Chargers per 1k EVs - 2024
-        <span class="info-icon wide" data-tooltip="Public charging points per 1,000 EVs. Declines as adoption outpaces infrastructure — a sign of success, not failure.">i</span>
+        Public Chargers - 2024
+        <span class="info-icon" data-tooltip="Total publicly accessible charging points (fast + slow).">i</span>
       </div>
-      <div class="k-val" id="kpi-charger-density">—</div>
-      <div class="k-delta" id="kpi-charger-delta">Select a country</div>
+      <div class="k-val" id="kpi-chargers">—</div>
+      <div class="k-delta" id="kpi-chargers-delta">Select a country</div>
     </div>
   </div>
 
@@ -1466,25 +1467,10 @@
     <!-- ── TAB: INFRASTRUCTURE ── -->
     <div class="tab-panel" id="tab-infra">
     <div id="infra-chart-container" style="width:100%;min-height:340px;"></div>
-
-      <div class="callout" id="callout-infra">
-        <div class="callout-icon">📉</div>
-        <div class="callout-text" id="callout-infra-text">
-          <strong>The density paradox:</strong> As EV adoption accelerates, chargers-per-1,000-EVs naturally declines — not because infrastructure shrinks, but because fleet growth outpaces it. This declining ratio is the signature of a successful infrastructure-led market.
-        </div>
-      </div>
-
     </div>
 
     <!-- ── TAB: VEHICLE MODE MIX ── -->
     <div class="tab-panel" id="tab-modes">
-
-      <!-- <div class="narrative-box" id="narrative-modes">
-        <div class="narrative-label">Mode Mix Context</div>
-        <div class="narrative-text" id="narrative-modes-text">
-          Select a country above to see its vehicle mode narrative.
-        </div>
-      </div> -->
 
       <!-- Stacked / Normalised toggle -->
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
@@ -1567,7 +1553,32 @@
 
       <!-- ── SUB-TAB: INFRASTRUCTURE ── -->
       <div class="sub-tab-panel" id="sub-tab-infra">
-        <div id="compare-infra-chart-container" style="width:100%;min-height:400px;"></div>
+
+        <div class="metrics-primer" style="margin-bottom:16px;padding:14px 18px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <div class="metrics-primer-icon" style="width:24px;height:24px;font-size:0.75rem;">📊</div>
+            <div style="font-family:'Geist Mono',monospace;font-size:0.72rem;color:var(--text-1);">
+              Charging Density (chargers per 1,000 EVs) = Public chargers ÷ Total EVs × 1,000
+            </div>
+          </div>
+          <div style="font-family:'Geist Mono',monospace;font-size:0.72rem;color:var(--text-1);">
+            Total EVs include BEV (battery electric), PHEV (plug-in hybrid), and FCEV (fuel cell).
+          </div>
+        </div>
+
+        <div id="compare-infra-chart-container" style="width:100%;min-height:400px;margin-bottom:-10px;"></div>
+
+        <!-- <div class="callout" id="callout-infra" style="margin-top:0;">
+          <div class="callout-icon">📉</div>
+          <div class="callout-text" id="callout-infra-text">
+            <strong>The density paradox:</strong> As EV adoption accelerates, chargers per 1,000 EVs naturally declines — not because infrastructure shrinks, but because fleet growth outpaces it. This declining ratio is the signature of a successful infrastructure-led market.
+          </div>
+        </div> -->
+
+        <div style="font-size:0.75rem;color:var(--text-3);line-height:1.6;margin-top:16px;">
+          <strong style="color:var(--accent);">The density paradox:</strong> As EV adoption accelerates, chargers per 1,000 EVs naturally declines — not because infrastructure shrinks, but because fleet growth outpaces it. This declining ratio is the signature of a successful infrastructure-led market.
+        </div>
+
       </div>
 
     </div>
@@ -1578,7 +1589,7 @@
   <footer>
     <div>
       <div class="footer-name">Alexandra Bauche, Anna Mowat, Shengmin Xiao</div>
-      <div class="footer-sub">IEA Global EV Data Explorer · 54 Countries · 2010–2024 · UC Berkeley MIDS W209</div>
+      <div class="footer-sub">Data: IEA Global EV Data Explorer · Policies: IEA Global EV Policy Explorer · 2010–2024</div>
     </div>
   </footer>
 
@@ -1631,8 +1642,8 @@
     document.getElementById('kpi-stock-delta').textContent     = '…';
     document.getElementById('kpi-sales-share').textContent     = '—';
     document.getElementById('kpi-sales-delta').textContent     = '…';
-    document.getElementById('kpi-charger-density').textContent = '—';
-    document.getElementById('kpi-charger-delta').textContent   = '…';
+    document.getElementById('kpi-chargers').textContent = '—';
+    document.getElementById('kpi-chargers-delta').textContent   = '…';
 
     document.getElementById('policy-list').innerHTML = `
       <div class="policy-item">
@@ -1827,13 +1838,13 @@
           v.salesDelta != null
             ? `${v.salesDelta >= 0 ? "↑" : "↓"} ${v.salesDelta >= 0 ? "+" : ""}${v.salesDelta.toFixed(1)}pp YoY`
             : "No YoY data";
-
-        // Charger density
-        document.getElementById("kpi-charger-density").textContent =
-          v.chargingDensity != null ? v.chargingDensity.toFixed(1) : "—";
-        document.getElementById("kpi-charger-delta").textContent =
-          v.chargingDelta != null
-            ? `${v.chargingDelta >= 0 ? "↑" : "↓"} ${v.chargingDelta >= 0 ? "+" : ""}${v.chargingDelta.toFixed(1)} YoY`
+        
+         // Chargers
+        document.getElementById("kpi-chargers").textContent =
+          v.totalChargers != null ? v.totalChargers.toLocaleString() : "—";
+        document.getElementById("kpi-chargers-delta").textContent =
+          v.chargersDelta != null
+            ? `${v.chargersDelta >= 0 ? "↑" : "↓"} ${v.chargersDelta >= 0 ? "+" : ""}${v.chargersDelta.toLocaleString()} YoY`
             : "No YoY data";
       }
     };
